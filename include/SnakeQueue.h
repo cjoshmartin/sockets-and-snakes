@@ -2,7 +2,7 @@
  * Queue data structure to keep track of the snake tail/history
  */
 
-#include "SnakeState.h"
+#include "SnakeHead.h"
 
 #define QUEUE_LEN 3600
 
