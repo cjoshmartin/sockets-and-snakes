@@ -20,11 +20,13 @@ CLIENT = $(BINDIR)/snakeclnt
 
 # Server binary
 SERVER = $(BINDIR)/snakeserv
+CLIENT = $(BINDIR)/snakeclnt
 
 # Primary source code directory and names
-SOURCEDIR = Source
-CLNTSRC = $(SOURCEDIR)/timeclnt.c
-SERVSRC = $(SOURCEDIR)/nat-timeserv.c
+SERVDIR = servsource
+CLNTDIR = clntsource
+CLNTSRC = $(wildcard $(SERVDIR)/*.c)
+SERVSRC = $(wildcard $(CLNTDIR)/*.c)
 
 # Object file directories and names
 BUILDDIR = build
@@ -38,17 +40,26 @@ TESTOBJS = $(patsubst $(TESTDIR)/%.c, $(BUILDDIR)/%.o, $(TESTS))
 
 all: $(CLIENT) $(SERVER)
 
+check:
+	echo "$(CLNTSRC)"
+	echo "$(SERVSRC)"
+
 # Binary executable recipe
-$(CLIENT): $(CLNTOBJS)
-	$(CC) $^ -o $(TARGET) $(CLNTLFS) $(CFS)
+$(SERVER): $(CLNTOBJS)
+	$(CC) $^ -o $(SERVER) $(SERVLFS) $(CFS)
 
 # Binary executable recipe for server
 $(CLIENT): $(SERVOBJS)
-	$(CC) $^ -o $(TARGET) $(CLNTLFS) $(CFS)
+	$(CC) $^ -o $(CLIENT) $(CLNTLFS) $(CFS)
 
-# Object recipes, defined generically
-$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
+# Client object recipes
+$(BUILDDIR)/%.o: $(CLNTDIR)/%.c 
 	$(CC) $(INC) $(CFS) -c -o $@ $<
+
+# Server object recipes
+$(BUILDDIR)/%.o: $(SERVDIR)/%.c
+	$(CC) $(INC) $(CFS) -c -o $@ $<
+
 
 # Testing code object recipes, defined generically
 $(BUILDDIR)/%.o: $(TESTDIR)/%.c
