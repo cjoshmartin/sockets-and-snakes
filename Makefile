@@ -7,31 +7,44 @@ CC = gcc
 # Compiler flags
 CFS =
 
+# Linker flags
+#CLNTLFS = -lcurses
+SERVLFS = 
+
 # Include directories
-INC = -I Include
+INC = -I include
 
 # Binary directory and name
-BINDIR = Binary
-TARGET = $(BINDIR)/note
+BINDIR = binary
+CLIENT = $(BINDIR)/snakeclnt
+
+# Server binary
+SERVER = $(BINDIR)/snakeserv
 
 # Primary source code directory and names
 SOURCEDIR = Source
-SRCS = $(wildcard $(SOURCEDIR)/*.c)
+CLNTSRC = $(SOURCEDIR)/timeclnt.c
+SERVSRC = $(SOURCEDIR)/nat-timeserv.c
 
 # Object file directories and names
-BUILDDIR = Build
-OBJS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SRCS))
+BUILDDIR = build
+CLNTOBJS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CLNTSRC))
+SERVOBJS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SEVSRC))
 
 # Directory for test executables
-TESTDIR = Test
+TESTDIR = test
 TESTS = $(wildcard $(TESTDIR)/*.c)
 TESTOBJS = $(patsubst $(TESTDIR)/%.c, $(BUILDDIR)/%.o, $(TESTS))
 
-all: $(TARGET)
+all: $(CLIENT) $(SERVER)
 
 # Binary executable recipe
-$(TARGET): $(OBJS)
-	$(CC) $^ -o $(TARGET)
+$(CLIENT): $(CLNTOBJS)
+	$(CC) $^ -o $(TARGET) $(CLNTLFS) $(CFS)
+
+# Binary executable recipe for server
+$(CLIENT): $(SERVOBJS)
+	$(CC) $^ -o $(TARGET) $(CLNTLFS) $(CFS)
 
 # Object recipes, defined generically
 $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
@@ -42,8 +55,8 @@ $(BUILDDIR)/%.o: $(TESTDIR)/%.c
 	$(CC) $(INC) $(CFS) -c -o $@ $<
 
 # Tests
-backendtests: $(TESTOBJS) $(OBJS)
-	$(CC) $(INC) $(CFS) -o $(BINDIR)/$@ $(BUILDDIR)/backend.o $(BUILDDIR)/backend_tests.o
+
+
 
 .PHONY: clean
 clean:
