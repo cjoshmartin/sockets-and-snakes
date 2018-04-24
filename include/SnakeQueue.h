@@ -7,12 +7,16 @@
 #define QUEUE_LEN 3600
 
 // Snake_Queue: to enqueue/dequeue snake position history
-typedef struct {
-	Tail queue_arr[QUEUE_LEN]; 	// Actual data container
-	int head, tail; 			// "Pointers" to the beginning/end
-	int length; 				// Positional difference between head/tail
-} Snake_Queue
+class SnakeQueue {
+	private:
+		TailSeg queue_arr[QUEUE_LEN]; 	// Actual data container
+		int head, tail; 			// "Pointers" to the beginning/end
+		int length; 				// Positional difference between head/tail
 
-void init_queue(Snake_Queue& the_queue);
-void enqueue(Snake_Queue& the_queue, item);
-void dequeue(Snake_Queue& the_queue, item);
+	public:
+		SnakeQueue();
+		~SnakeQueue();
+
+		void enqueue(TailSeg& segment);
+		TailSeg dequeue(void);
+};
