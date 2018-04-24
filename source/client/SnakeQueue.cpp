@@ -18,4 +18,18 @@ SnakeQueue::~SnakeQueue() {
 
 }
 
-// Enqueue a
+// Enqueue a tail segment into the queue at the head pointer location
+void SnakeQueue::enqueue(TailSeg& segment) {
+	if (head != tail) {
+		queue_arr[head++] = segment;
+		length++;
+	}
+}
+
+// Dequeue the last tail segment from the queue
+TailSeg SnakeQueue::dequeue(void) {
+	if (head != tail) {
+		length--;
+		return queue_arr[tail++];
+	}
+}
