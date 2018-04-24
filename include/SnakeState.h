@@ -13,31 +13,58 @@ enum direction{
 };
 
 // Snake_Head: defines the position and direction of the snake's head
-typedef struct {
-	int x_pos, y_pos; 	// The position of the snake head on the screen
-	int dir; 			// Direction of the snake's movement (up, down, left, right)
-	int length; 		// Length of the snake
-} Snake_Head;
+class SnakeHead {
+	private:
+		int x_pos, y_pos; 	// The position of the snake head on the screen
+		int dir; 			// Direction of the snake's movement (up, down, left, right)
+		int length; 		// Length of the snake
+
+	public:
+		SnakeHead();
+		~SnakeHead();
+};
 
 
 // Tail_Seg: Snake tail piece structure
-typedef struct {
-	int x_pos, y_pos;
-} Tail_Seg;
+class TailSeg {
+	private:
+		int x_pos, y_pos;
+
+	public:
+		TailSeg();
+		~TailSeg();
+		TailSeg(int xpos, int ypos);
+};
 
 
-// Food: snake food position structure
-typedef struct {
-	int x_pos, y_pos;
-} Food;
+// SnakeFood: snake food position structure
+class SnakeFood {
+	private:
+		int x_pos, y_pos;
+
+	public:
+		SnakeFood();
+		~SnakeFood();
+		SnakeFood(int xpos, int ypos);
+
+		int getXPos();
+		int getYPos();
+};
 
 
 // Board_State: Board state, to be passed between client and server
-typedef struct {
-	int life_death; 	// Flag to determine if the game is still going on
-	SnakeHead player_1;
-	int player_1_score;
-	SnakeHead player_2;
-	int player_2_score;
-	Food snake_food;
-} Board_State;
+class BoardState {
+	private:
+		int life_death; 	// Flag to determine if the game is still going on
+		SnakeHead player_1;
+		int player_1_score;
+		SnakeHead player_2;
+		int player_2_score;
+		Food snake_food;
+
+	public:
+		BoardState();
+		~BoardState();
+
+		//void updateState();
+};
