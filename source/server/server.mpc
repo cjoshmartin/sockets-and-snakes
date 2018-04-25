@@ -1,0 +1,13 @@
+
+//SnakeGame
+
+project (server) {
+  exename = server 
+  install = .
+ 
+  Source_Files {
+    buildflags = -g -lcurses
+    *.cpp
+  }
+
+}
