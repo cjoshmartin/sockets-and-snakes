@@ -1,6 +1,7 @@
 #ifndef SERVER_H 
 #define SERVER_H
 
+#include "../include/BoardState.h"
 
 void sendToClient(void * buffer,int valread,int sd);
 

@@ -9,7 +9,6 @@
 #include <unistd.h>
 
 #include "server.h"
-#include "../include/BoardState.h"
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
