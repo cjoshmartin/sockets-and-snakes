@@ -7,19 +7,14 @@
 #include <sys/socket.h> 
 #include <string.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "server.h"
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(
-        int master_socket,
-        int max_clients,
-        int* client_socket,
-        struct sockaddr_in address,
-        int addrlen,
-        BoardState startState
-        )
+void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_in address, int addrlen,
+            BoardState startState, bool *pBoolean)
 {
     fd_set readfds;
 
@@ -127,12 +122,19 @@ void looper(
 
             //Echo back the message that came in 
             else
-            {  
-                sendToClient(buffer,valread,sd);
-
+            {
+                std::cout <<  "\n"<<(*pBoolean) << "\n";
+                if((*pBoolean)){ // check if server is running setup
+                    ; // do nothing, please homie... just hang in
+                }
+            else {
+                    sendToClient(buffer, valread, sd);
+                }
             }// end of else statement  
         }// end of outer if statement  
-    } // end of for loop, looping over max_clients  
+    } // end of for loop, looping over max_clients
+
+    *pBoolean = false; // tells it not running in setup
 } //end of looper
 
 

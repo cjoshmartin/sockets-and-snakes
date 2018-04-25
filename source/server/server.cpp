@@ -100,12 +100,13 @@ int main(int argc , char *argv[])
     addrlen = sizeof(address);  
     puts("Waiting for connections ...");  
 
-    BoardState startState; // board state 
+    BoardState startState; // board state
+    bool isSetup = true;
 
     //set of socket descriptors 
     while(TRUE)  
-    {  
-        looper(/*readfds,*/ master_socket, max_clients,client_socket,address,addrlen, BoardState startState);
+    {
+        looper(master_socket, max_clients, client_socket, address, addrlen, startState, &isSetup);
     } // end of while(TRUE) 
 
     return 0;  
