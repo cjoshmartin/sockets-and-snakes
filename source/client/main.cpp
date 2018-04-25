@@ -9,7 +9,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <cstdlib>
+#include <signal.h>
 
+void handle(int signum);
 void UpdateBoard(BoardState& theBoard);
 
 int main(void) {
@@ -18,21 +20,28 @@ int main(void) {
 	// Initialize players based on comms (which player I am, 1 or 2)
 	// Set up alarm and stuff
 	// Wait for input and update position accordingly
+	signal(SIGINT, handle);
 	SnakeBoard myBoard;
-	sleep(1);
+	myBoard.setCurrentPlayer(1);
 	BoardState newBoard;
-	myBoard.update(newBoard);
-	myBoard.draw();
-	sleep(1);
+	while (1) {
+		UpdateBoard(newBoard);
+		myBoard.update(newBoard);
+		myBoard.draw();
+		newBoard = myBoard.collectInput();
+	}
 
 	// Update the board and draw
-	UpdateBoard(newBoard);
-	newBoard = myBoard.update(newBoard);
-	myBoard.draw();
-	sleep(1);
 }
 
 // Gets a new board state by socket communiation
 void UpdateBoard(BoardState& theBoard) {
 	theBoard.update();
+	usleep(100000);
+}
+
+// Control-c handler
+void handle(int signum) {
+	endwin();
+	exit(1);
 }

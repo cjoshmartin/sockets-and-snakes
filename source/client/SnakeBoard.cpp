@@ -11,7 +11,8 @@ SnakeBoard::SnakeBoard() {
 	// Initialize curses environment
 	initscr();
 	noecho();
-	crmode();
+	cbreak();
+	echo();
 	curs_set(0);
 
 	// Top row border
@@ -64,6 +65,11 @@ BoardState SnakeBoard::update(BoardState& newState) {
 	}
 }
 
+// Sets the current player (i.e., which one is controlled by keypresses)
+void SnakeBoard::setCurrentPlayer(int playerNum) {
+	currentPlayer = playerNum;
+}
+
 // Draw the board on the screen according to the board's state
 void SnakeBoard::draw(void) {
 	// Draw both players
@@ -73,4 +79,18 @@ void SnakeBoard::draw(void) {
 	// Draw the food
 	mvaddch(food.getYPos(), food.getXPos(), FOODCHAR);
 	refresh();
+}
+
+// Collect nonblocking terminal input from the user and return BoardState based
+//  on this input. Also modifies the current player's head.
+BoardState SnakeBoard::collectInput(void) {
+	// Perform a nonblocking read of the terminal (crmode set)
+	char ch;
+	ch = getch();
+
+	// Switch
+	// Clear buffer
+	// Encode in BoardState
+	// Update current player's head
+	// Return state
 }

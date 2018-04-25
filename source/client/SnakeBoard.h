@@ -32,6 +32,7 @@ class SnakeBoard {
 
 		void setCurrentPlayer(int playerNum);
 		BoardState update(BoardState& state);
+		BoardState collectInput(void);
 		void draw(void);
 };
 

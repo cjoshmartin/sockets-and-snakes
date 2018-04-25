@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-        signal(SIGINT,ctrl_c_handler);
+    signal(SIGINT,ctrl_c_handler);
 	int answerInt=0;
 	Board game;
 	cout<<"How many players?(1/2): ";
