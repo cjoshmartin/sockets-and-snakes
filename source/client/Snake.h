@@ -6,6 +6,7 @@
 #ifndef _SNAKE_H
 #define _SNAKE_H
 
+#include "TailSeg.h"
 #include "../include/SnakeHead.h"
 #include <curses.h>
 
@@ -14,6 +15,7 @@ class Snake {
 		bool alive;
 		bool growflag;
 		SnakeHead head;
+		int last_x, last_y;
 		//SnakeTail tail;
 
 	public:
@@ -22,7 +24,7 @@ class Snake {
 
 		void initPos(int xpos, int ypos);
 		bool isAlive(void);
-		void updatePos(int head_x, int head_y);
+		void undraw(void);
 		void draw(void);
 		void newHead(SnakeHead& newHead);
 		//grow(void);

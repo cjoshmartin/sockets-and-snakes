@@ -8,6 +8,9 @@
 #include <iostream>
 #include <unistd.h>
 #include <signal.h>
+#include <cstdlib>
+
+void UpdateBoard(BoardState& theBoard);
 
 int main(void) {
 	// Initialize board and draw borders
@@ -16,8 +19,20 @@ int main(void) {
 	// Set up alarm and stuff
 	// Wait for input and update position accordingly
 	SnakeBoard myBoard;
+	sleep(1);
 	BoardState newBoard;
 	myBoard.update(newBoard);
 	myBoard.draw();
-	sleep(3);
+	sleep(1);
+
+	// Update the board and draw
+	UpdateBoard(newBoard);
+	newBoard = myBoard.update(newBoard);
+	myBoard.draw();
+	sleep(1);
+}
+
+// Gets a new board state by socket communiation
+void UpdateBoard(BoardState& theBoard) {
+	theBoard.update();
 }

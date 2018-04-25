@@ -6,7 +6,7 @@
 #include "Snake.h"
 
 // Default constructor
-Snake::Snake() : alive(true), growflag(false) {
+Snake::Snake() : alive(true), growflag(false), last_x(-1), last_y(-1) {
 
 }
 
@@ -20,14 +20,20 @@ void Snake::initPos(int xpos, int ypos) {
 	head.setPos(xpos, ypos);
 }
 
-// Updates the position of the snake given a new head position
-void Snake::updatePos(int head_x, int head_y) {
-	
-}
-
 // Draws the snake on the screen according to the position
 void Snake::draw(void) {
-	mvaddch(head.getYPos(), head.getXPos(), SNAKECHAR);
+	// Replace old head position with tail char.
+	if (last_x != -1 && last_y != -1) {
+		//mvaddch(last_y, last_x, TAILCHAR);
+		mvaddch(last_y, last_x, ' ');
+	}
+
+	// Draw new head
+	mvaddch(head.getYPos(), head.getXPos(), 'T');
+
+	// Update last position
+	last_x = head.getXPos();
+	last_y = head.getYPos();
 }
 
 // Update the head of the snake given a head

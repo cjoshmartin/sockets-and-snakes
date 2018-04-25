@@ -5,6 +5,8 @@
 #ifndef _TAILSEG_H
 #define _TAILSEG_H
 
+#define TAILCHAR 'O'
+
 class TailSeg {
 	private:
 		int x_pos, y_pos;
