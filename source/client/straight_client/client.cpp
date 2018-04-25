@@ -61,9 +61,9 @@ main(int ac, char *av[])
       */
 
 	messlen = read(sock_id, (void *)(&incoming_state), sizeof(BoardState));     /* read stuff   */
+	if ( messlen == - 1 )
+	       oops("read") ;
 	std::cout << incoming_state.test_string << "\n";
-//	if ( messlen == - 1 )
-//	       oops("read") ;
 //	if ( write( 1, voidPackages, messlen ) != messlen )  /* and write to */
 //	       oops( "write" );                        /* stdout       */
 	
