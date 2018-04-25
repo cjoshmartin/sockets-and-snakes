@@ -11,7 +11,13 @@
 #include <cstdlib>
 #include <signal.h>
 
+// Global update flag to control the timing of the system. Set to "true"
+//  by the alarm handler so that refresh does not occur more often than
+//  once every 0.1 seconds.
+bool updateFlag = true;
+
 void handle(int signum);
+//void updateHandler(int signum);
 void UpdateBoard(BoardState& theBoard);
 
 int main(void) {
@@ -24,11 +30,12 @@ int main(void) {
 	SnakeBoard myBoard;
 	myBoard.setCurrentPlayer(1);
 	BoardState newBoard;
-	while (1) {
+	int i = 20;
+	while (i) {
 		UpdateBoard(newBoard);
 		myBoard.update(newBoard);
 		myBoard.draw();
-		newBoard = myBoard.collectInput();
+		newBoard = myBoard.collectInput(newBoard);
 	}
 
 	// Update the board and draw

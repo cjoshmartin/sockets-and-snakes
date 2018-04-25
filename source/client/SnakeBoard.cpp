@@ -11,8 +11,9 @@ SnakeBoard::SnakeBoard() {
 	// Initialize curses environment
 	initscr();
 	noecho();
-	cbreak();
-	echo();
+	timeout(1);
+	//cbreak();
+	//nodelay(stdscr, false);
 	curs_set(0);
 
 	// Top row border
@@ -83,14 +84,41 @@ void SnakeBoard::draw(void) {
 
 // Collect nonblocking terminal input from the user and return BoardState based
 //  on this input. Also modifies the current player's head.
-BoardState SnakeBoard::collectInput(void) {
-	// Perform a nonblocking read of the terminal (crmode set)
+BoardState SnakeBoard::collectInput(BoardState oldState) {
+	int newdir = -1;
 	char ch;
+
+	// Perform a nonblocking read from the terminal (crmode set)
 	ch = getch();
 
-	// Switch
-	// Clear buffer
-	// Encode in BoardState
-	// Update current player's head
-	// Return state
+	// Determine direction/action depending on character
+	switch(ch) {
+		case 'w': case 'W': case 'k': case 'K':
+			newdir = Up;
+			break;
+		case 's': case 'S': case 'j': case 'J':
+			newdir = Down;
+			break;
+		case 'a': case 'A': case 'h': case 'H':
+			newdir = Left;
+			break;
+		case 'd': case 'D': case 'l': case 'L':
+			newdir = Right;
+			break;
+		case 'q': case 'Q': case EOF:
+			// Quit game
+		default: // If unrecognized key or ERR, do nothing.
+			newdir = -1;
+	}
+
+	// If direction was changed
+	if (newdir != -1) {
+		// Set direction for current player
+		if (currentPlayer == 1)
+			oldState.player_1.setDir(newdir);
+		else
+			oldState.player_2.setDir(newdir);
+	}
+	
+	return oldState;
 }

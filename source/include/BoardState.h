@@ -13,6 +13,7 @@
 #include "SnakeFood.h"
 #include "SnakeHead.h"
 #include <string>
+
 class BoardState {
 	public:
 		int winner;

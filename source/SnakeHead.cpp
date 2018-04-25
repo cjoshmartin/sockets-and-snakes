@@ -49,6 +49,7 @@ int SnakeHead::getLength(void) const {
 
 // Update the position according to the direction
 bool SnakeHead::updatePos() {
+	char noCollision = true;
 	// Update position based on current direction
 	switch (dir) {
 		case Up:
@@ -65,17 +66,31 @@ bool SnakeHead::updatePos() {
 			break;
 	}
 
-	// Check for collision with walls
-	if (x_pos == 0 || x_pos == X_SIZE-1)
-		return false;
-	if (y_pos == 0 || y_pos == Y_SIZE-1)
-		return false;
-	return true;
+	// Check x coordinates for collision with walls
+	if (x_pos <= 0) {
+		x_pos = 0;
+		noCollision = false;
+	} else if (x_pos >= X_SIZE-1) {
+		x_pos = X_SIZE-1;
+		noCollision = false;
+	}
+
+	// Check y coordinates for collision
+	if (y_pos <= 0) {
+		y_pos = 0;
+		noCollision = false;
+	} else if (y_pos >= Y_SIZE-1) {
+		y_pos = Y_SIZE-1;
+		noCollision = false;
+	}
+
+	// Return collision state
+	return noCollision;
 }
 
 // Sets the direction of the snake
 void SnakeHead::setDir(int newdir) {
-	if (dir == Up || dir == Down || dir == Left || dir == Right)
+	if (newdir == Up || newdir == Down || newdir == Left || newdir == Right)
 		dir = newdir;
 }
 
