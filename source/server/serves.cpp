@@ -76,7 +76,7 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
         //send new connection greeting message 
-        if( send(new_socket, message, strlen(message), 0) != strlen(message) )  
+        if( send(new_socket, startState, sizeof(startState), 0) != sizeof(startState))
         {  
             perror("send");  
         }  
@@ -91,7 +91,7 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
             {
                 client_socket[i] = new_socket;
                 char *message = "HELLO, TEST ECHO\n";
-                send(client_socket[i], startState,strlen(message),0);
+//                send(client_socket[i], startState,sizeof(BoardState),0);
 
                 break;
             }  
@@ -112,7 +112,7 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 //Somebody disconnected , get his details and print 
                 getpeername(sd , (struct sockaddr*)&address , \
                         (socklen_t*)&addrlen);  
-                printf("Host disconnected , ip %s , port %d \n" , 
+                printf("Client disconnected , ip %s , port %d \n" ,
                         inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
                 //Close the socket and mark as 0 in list for reuse 

@@ -102,13 +102,13 @@ int main(int argc , char *argv[])
     puts("Waiting for connections ...");  
 
 
-    BoardState * startState = new BoardState();
-    void * water = (void *)startState;
+    BoardState  startState;
+    
 
     //set of socket descriptors 
     while(TRUE)  
     {
-        looper(master_socket, max_clients, client_socket, address, addrlen, water);
+        looper(master_socket, max_clients, client_socket, address, addrlen, (void *)(&startState));
     } // end of while(TRUE) 
 
     return 0;  

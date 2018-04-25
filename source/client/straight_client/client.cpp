@@ -18,8 +18,9 @@ main(int ac, char *av[])
 	struct sockaddr_in  servadd;        /* the number to call */
 	struct hostent      *hp;            /* used to get number */
 	int    sock_id, sock_fd;            /* the socket and fd  */
-	void *   message;             /* to receive message */ // TODO: this is giving the bad address message
-	int    messlen;                     /* for message length */
+	//void *   voidPackages;             [> to receive voidPackages <] // TODO: this is giving the bad address voidPackages
+        BoardState incoming_state;
+	int    messlen;                     /* for voidPackages length */
 	
 	int i;
 	char clientid[4];
@@ -59,18 +60,19 @@ main(int ac, char *av[])
       * Step 3: transfer data from server, then hangup
       */
 
-	messlen = read(sock_id, message, BUFSIZ);     /* read stuff   */
-	if ( messlen == - 1 )
-	       oops("read") ;
-	if ( write( 1, message, messlen ) != messlen )  /* and write to */
-	       oops( "write" );                        /* stdout       */
+	messlen = read(sock_id, (void *)(&incoming_state), sizeof(BoardState));     /* read stuff   */
+	std::cout << incoming_state.test_string << "\n";
+//	if ( messlen == - 1 )
+//	       oops("read") ;
+//	if ( write( 1, voidPackages, messlen ) != messlen )  /* and write to */
+//	       oops( "write" );                        /* stdout       */
 	
 	while (true) {
-		printf("client %s-%d writing to the server\n",clientid, i);
-		//sprintf(message, "Greetings from client %s (%i)", clientid, i);
-//		messlen = strlen(message);
-		if ( write( sock_id, message, messlen ) != messlen )  /* and write to */
-			oops( "write" );
+//		printf("client %s-%d writing to the server\n",clientid, i);
+		//sprintf(voidPackages, "Greetings from client %s (%i)", clientid, i);
+//		messlen = strlen(voidPackages);
+//		if ( write( sock_id, voidPackages, messlen ) != messlen )  /* and write to */
+//			oops( "write" );
 		//usleep(333*1000);
 		sleep(1);
 	}

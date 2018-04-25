@@ -12,7 +12,7 @@
 
 #include "SnakeFood.h"
 #include "SnakeHead.h"
-
+#include <string>
 class BoardState {
 	public:
 		int winner;
@@ -21,7 +21,7 @@ class BoardState {
 		SnakeHead player_1;
 		SnakeHead player_2;
 		SnakeFood snake_food;
-
+		std::string test_string;
 		BoardState();
 		~BoardState();
 
