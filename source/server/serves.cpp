@@ -25,8 +25,6 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
         i;
 
     char buffer[1025];
-//     BoardState state;  //data buffer of 1K
-//    void * state;
     //a message 
     char *message = "Welcome! We are waiting for another player  to show up\r\n";
 
@@ -93,7 +91,6 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
             {
                 client_socket[i] = new_socket;
                 char *message = "HELLO, TEST ECHO\n";
-//                send(client_socket[i], startState,sizeof(BoardState),0);
 
                 break;
             }  
