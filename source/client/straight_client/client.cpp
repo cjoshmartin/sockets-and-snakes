@@ -1,6 +1,7 @@
 /* timeclnt.c - a client for timeserv.c
  *              usage: timeclnt hostname portnumber
  */
+#include <iostream>
 #include       <stdio.h>
 #include  	   <string.h>
 #include       <sys/types.h>
@@ -28,7 +29,7 @@ main(int ac, char *av[])
 	//make some random ID for this client
 	srand (time(NULL));
 	sprintf(clientid,"%d", rand()%1000);
-	
+	std::cout << clientid << "\n";
      /*
       * Step 1: Get a socket
       */
@@ -60,19 +61,14 @@ main(int ac, char *av[])
       * Step 3: transfer data from server, then hangup
       */
 
-	messlen = read(sock_id, message, BUFSIZ);     /* read stuff   */
+	messlen = read(sock_id, (char *)message, BUFSIZ);     /* read stuff   */
 	if ( messlen == - 1 )
-	       oops("read") ;
+	       oops("TACOS ARE COOL, read") ; // TODO: breaking here
 	if ( write( 1, message, messlen ) != messlen )  /* and write to */
 	       oops( "write" );                        /* stdout       */
-	
-	for( i = 0; 1; i ++) {
-//		printf("client %s-%d writing to the server\n",clientid, i);
-		//sprintf(message, "Greetings from client %s (%i)", clientid, i);
-//   gets(message);
+
+	while(true) {
    // TODO: POLLING HERE for change in postion
-   /*strcat(message, clientid);*/
-//		messlen = strlen(message);
 		if ( write( sock_id, message, sizeof(BoardState) ) != messlen )  /* and write to */
 			oops( "write" );
 		//usleep(333*1000);
