@@ -12,12 +12,26 @@ SnakeBoard::SnakeBoard() {
 	initscr();
 	noecho();
 	crmode();
+	curs_set(0);
 
-	// Draw border
+	// Top row border
+	mvaddch(0, 0, BORDER_CORNER);
+	mvaddch(0, SCREEN_WIDTH-1, BORDER_CORNER);
+	for (int i = 1; i < SCREEN_WIDTH-1; i++) {
+		mvaddch(0, i, BORDER_EDGE);
+	}
 
-	// Top row:
-	for (int i = 0; i < SCREEN_WIDTH; i++) {
-		mvaddch(0, i, BORDERSYM);
+	// Bottom border
+	mvaddch(SCREEN_HEIGHT-1, 0, BORDER_CORNER);
+	mvaddch(SCREEN_HEIGHT-1, SCREEN_WIDTH-1, BORDER_CORNER);
+	for (int i = 1; i < SCREEN_WIDTH-1; i++) {
+		mvaddch(SCREEN_HEIGHT-1, i, BORDER_EDGE);
+	}
+
+	// Sides border
+	for (int i = 1; i < SCREEN_HEIGHT-1; i++) {
+		mvaddch(i, 0, BORDER_SIDE);
+		mvaddch(i, SCREEN_WIDTH-1, BORDER_SIDE);
 	}
 
 	// Initial refresh
@@ -27,4 +41,17 @@ SnakeBoard::SnakeBoard() {
 // Destroy curses board
 SnakeBoard::~SnakeBoard() {
 	endwin();
+}
+
+// Update the local board given a BoardState (from the server)
+BoardState SnakeBoard::update(BoardState& newstate) {
+	// Update player 1 and 2's snake heads
+	// Eat food
+	// Return updated state
+}
+
+// Draw the board on the screen according to the board's state
+void SnakeBoard::draw(void) {
+	player1.draw();
+	player2.draw();
 }

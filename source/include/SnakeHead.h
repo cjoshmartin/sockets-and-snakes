@@ -6,13 +6,14 @@
 #ifndef _SNAKEHEAD_H
 #define _SNAKEHEAD_H
 
-#define X_SIZE 80
-#define Y_SIZE 24
+#include "SnakeFood.h"
 
 #define PLAYER_1_X 15
 #define PLAYER_1_Y 7
 #define PLAYER_2_X 64
 #define PLAYER_2_Y 7
+
+#define SNAKECHAR 'S'
 
 enum Direction{
 	Up,
@@ -30,6 +31,8 @@ class SnakeHead {
 	public:
 		SnakeHead();
 		~SnakeHead();
+
+		SnakeHead(int xpos, int ypos);
 
 		void setPos(int xpos, int ypos);
 		void setDir(int newdir);

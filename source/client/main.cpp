@@ -6,6 +6,8 @@
 #include "SnakeBoard.h"
 #include <curses.h>
 #include <iostream>
+#include <unistd.h>
+#include <signal.h>
 
 int main(void) {
 	// Initialize board and draw borders
@@ -14,4 +16,6 @@ int main(void) {
 	// Set up alarm and stuff
 	// Wait for input and update position accordingly
 	SnakeBoard myBoard;
+	myBoard.draw();
+	sleep(3);
 }

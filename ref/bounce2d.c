@@ -45,7 +45,6 @@ void set_up()
 {
 	void	ball_move(int);
 
-	// Get terminal window size
 
 	the_ball.y_pos = Y_INIT;
 	the_ball.x_pos = X_INIT;

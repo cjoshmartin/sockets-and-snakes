@@ -19,6 +19,16 @@ SnakeHead::SnakeHead(int xpos, int ypos) : x_pos(xpos), y_pos(ypos), dir(Up), le
 
 }
 
+// Returns the X position of the head
+int SnakeHead::getXPos(void) {
+	return x_pos;
+}
+
+// Returns the Y position of the head
+int SnakeHead::getYPos(void) {
+	return y_pos;
+}
+
 // Update the position according to the direction
 bool SnakeHead::updatePos() {
 	// Update position based on current direction
@@ -47,7 +57,7 @@ bool SnakeHead::updatePos() {
 
 // Sets the direction of the snake
 void SnakeHead::setDir(int newdir) {
-	if (dir == Up || dir == down || dir == left || dir == right)
+	if (dir == Up || dir == Down || dir == Left || dir == Right)
 		dir = newdir;
 }
 

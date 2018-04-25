@@ -6,6 +6,9 @@
 #ifndef _SNAKE_H
 #define _SNAKE_H
 
+#include "../include/SnakeHead.h"
+#include <curses.h>
+
 class Snake {
 	private:
 		bool alive;
@@ -17,9 +20,10 @@ class Snake {
 		Snake();
 		~Snake();
 
-		void initPos(int xposk, int ypos);
+		void initPos(int xpos, int ypos);
 		bool isAlive(void);
-		updatePos(int head_x, int head_y);
+		void updatePos(int head_x, int head_y);
+		void draw(void);
 		//grow(void);
 };
 

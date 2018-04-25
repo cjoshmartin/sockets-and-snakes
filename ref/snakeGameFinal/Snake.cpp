@@ -100,12 +100,10 @@ void Snake::snakeMove(){
             tempY=snakeArray[this->snakeLength()-1].getPositionY();
 
             for(;snakeIndex>0;snakeIndex--){
-                this->snakeArray[snakeIndex].updatePosition(this->snakeArray[snakeIndex-1].getPositionX(),
-                                                    this->snakeArray[snakeIndex-1].getPositionY());
+                this->snakeArray[snakeIndex].updatePosition(this->snakeArray[snakeIndex-1].getPositionX(), this->snakeArray[snakeIndex-1].getPositionY());
             }
 
-        this->snakeArray[0].updatePosition(this->snakeArray[0].getPositionX()+this->direction.getX(),
-                                        this->snakeArray[0].getPositionY()+this->direction.getY());
+        this->snakeArray[0].updatePosition(this->snakeArray[0].getPositionX()+this->direction.getX(), this->snakeArray[0].getPositionY()+this->direction.getY());
 
         this->snakeArray[this->snakeLength()].updatePosition(tempX,tempY);
         this->length++;

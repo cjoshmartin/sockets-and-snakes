@@ -25,7 +25,7 @@ class BoardState {
 		BoardState();
 		~BoardState();
 
-		void updateState();
+		void update();
 };
 
 #endif
