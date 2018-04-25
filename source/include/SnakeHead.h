@@ -30,17 +30,19 @@ class SnakeHead {
 
 	public:
 		SnakeHead();
+		SnakeHead(const SnakeHead& rhs);
 		~SnakeHead();
 
 		SnakeHead(int xpos, int ypos);
 
 		void setPos(int xpos, int ypos);
 		void setDir(int newdir);
-		int getXPos();
-		int getYPos();
+		int getDir(void) const;
+		int getXPos(void) const;
+		int getYPos(void) const;
+		int getLength(void) const;
 		void addLength(void);
-		bool updatePos();
-		int getLength(void);
+		bool updatePos(void);
 };
 
 #endif

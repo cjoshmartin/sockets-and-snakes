@@ -1,10 +1,7 @@
 *.swp
 *.swo
 *.o
-build/*
-!build/.gitkeep
-binary/*
-!binary/.gitkeep
+source/client/client
 source/.idea/*
 source/cmake-build-debug/*
 source/CMakeLists.txt
