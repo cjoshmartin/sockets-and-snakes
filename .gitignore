@@ -8,3 +8,5 @@ binary/*
 source/.idea/*
 source/cmake-build-debug/*
 source/CMakeLists.txt
+source/server/server
+source/client/straight_client/tclient
