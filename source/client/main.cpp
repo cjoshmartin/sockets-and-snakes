@@ -24,25 +24,33 @@ int main(void) {
 	// Time-storing variables to enforce minimum refresh time
 	struct timeval start, end;
 
-	// Initialize communication
+        int playerNum = 1;
+        bool playing;
 
 	// Initialize board and current player according to initial communication
 	SnakeBoard gameBoard;
-	gameBoard.setCurrentPlayer(1);
 	BoardState boardState;
+
+	// Initialize communication
+        //playerNum = initCommuniation()
+
+        // Set local player number
+	gameBoard.setCurrentPlayer(playerNum);
 
 	// Install ^C handler
 	signal(SIGINT, killHandle);
 
-	while (1) {
+        // Loop until win
+        playing = true;
+	while (playing) {
 		// Start timing loop
 		gettimeofday(&start, NULL);
 
 		// Update the board from the server
-		UpdateBoard(boardState);
+		UpdateBoard(boardState); // get from client side
 
 		// Update the graphical board from the state
-		gameBoard.update(boardState);
+		playing = gameBoard.update(boardState);
 
 		// Draw the board on the screen
 		gameBoard.draw();
@@ -51,7 +59,7 @@ int main(void) {
 		boardState = gameBoard.collectInput(boardState);
 
 		// Send new state to the server
-		//SendState(boardState);
+		//SendState(boardState); // Send from client side
 		
 		// Enforce minimum elapsed time of 80 ms by waiting for that time
 		double diff;
@@ -60,7 +68,7 @@ int main(void) {
 		} while (timedif(start, end) < 80000);
 	}
 
-	// Update the board and draw
+	// Print winner/loser and wait for keypress
 }
 
 // Gets a new board state by socket communiation
