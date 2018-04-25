@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <signal.h>
 #include <string.h>
+#include <sys/time.h>
 
 // Global update flag to control the timing of the system. Set to "true"
 //  by the alarm handler so that refresh does not occur more often than
@@ -21,6 +22,7 @@ bool drawFlag = true;
 void handle(int signum);
 void alarmHandle(int signum);
 void UpdateBoard(BoardState& theBoard);
+int timedif(struct timeval start, struct timeval end);
 
 int main(void) {
 	// Initialize board and draw borders
@@ -29,9 +31,11 @@ int main(void) {
 	// Set up alarm and stuff
 	// Wait for input and update position accordingly
 
+	// Time-storing variables to enforce minimum refresh time
+	struct timeval start, end;
+
 	// Install signal handlers: ^C and alarm
 	signal(SIGINT, handle);
-	signal(SIGALRM, alarmHandle);
 
 	// Initialize board and current player according to initial communication
 	SnakeBoard myBoard;
@@ -40,14 +44,21 @@ int main(void) {
 	int i = 20;
 
 	// Set refresh rate
-	set_ticker(10);
+	//set_ticker(100);
 
+	drawFlag = true;
 	while (i) {
+		gettimeofday(&start, NULL);
 		UpdateBoard(newBoard);
 		myBoard.update(newBoard);
-		while (!drawFlag) ;
 		myBoard.draw();
 		newBoard = myBoard.collectInput(newBoard);
+		
+		// Enforce minimum elapsed time of 100 ms
+		double diff;
+		do {
+			gettimeofday(&end, NULL);
+		} while (timedif(start, end) < 70000);
 	}
 
 	// Update the board and draw
@@ -56,17 +67,15 @@ int main(void) {
 // Gets a new board state by socket communiation
 void UpdateBoard(BoardState& theBoard) {
 	theBoard.update();
-	drawFlag = false;
-}
-
-// Sets the drawFlag to enforce a minimum refresh time
-void alarmHandle(int signum) {
-	signal(SIGALRM, alarmHandle);
-	drawFlag = true;
 }
 
 // Control-c handler
 void handle(int signum) {
 	endwin();
 	exit(1);
+}
+
+// Calculates the time difference between two different struct timeval structures. Returns the number of milliseconds
+int timedif(struct timeval start, struct timeval end) {
+	return (end.tv_sec*1000000 + end.tv_usec) - (start.tv_sec*1000000 + start.tv_usec);
 }
