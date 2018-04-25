@@ -14,9 +14,10 @@
 #include <signal.h>
 
 #include "server.h"
+#include "../include/BoardState.h"
 
-#define TRUE   1
-#define FALSE  0
+#define TRUE   true
+#define FALSE  false
 #define PORT 9888// 1025 - 32000
 
 
