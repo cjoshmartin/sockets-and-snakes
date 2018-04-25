@@ -3,9 +3,15 @@
 #include <errno.h> 
 #include <sys/select.h> 
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <sys/socket.h> 
+#include <string.h>
+#include <unistd.h>
 
 #include "server.h"
+#include "../include/BoardState.h"
+#include "../include/SnakeFood.h"
+#include "../include/SnakeHead.h"
 
 void looper(
         int master_socket,
@@ -24,7 +30,7 @@ void looper(
         new_socket,
         i;  
 
-    char buffer[1025];  //data buffer of 1K 
+    void * buffer;  //data buffer of 1K 
 
     //a message 
     char *message = "ECHO Daemon v1.0 \r\n";  
@@ -130,15 +136,15 @@ void looper(
 } //end of looper
 
 
-void sendToClient(char * buffer,int valread,int sd)
+void sendToClient(void * buffer,int valread,int sd)
 {
+
+    BoardState * state = (BoardState *)buffer;
 
     //set the string terminating NULL byte on the end 
     //of the data read 
-    buffer[valread] = '\0';
-    printf("Read from the client: %s\n", buffer);
-    send(sd , buffer , strlen(buffer) , 0 );  // NOTE: sends data back, 
+    //printf("Read from the client: %s\n", buffer);
+    send(sd , buffer , sizeof(buffer), 0 );  // NOTE: sends data back, 
                                                 //one client at a time 
-
 }
 
