@@ -3,7 +3,7 @@
  * 	Implementation file for the snake tail piece queue.
  */
 
-#include "SnakeQueue.h"
+#include "../../include/SnakeQueue.h"
 
 // Default constructor
 SnakeQueue::SnakeQueue() {

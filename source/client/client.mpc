@@ -6,5 +6,8 @@ project (client) {
     buildflags = -g -lcurses
     *.cpp
   }
+  Header_Files {
+	../../include/*.h
+  }
 
 }
