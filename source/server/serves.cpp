@@ -3,9 +3,15 @@
 #include <errno.h> 
 #include <sys/select.h> 
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <sys/socket.h> 
+#include <string.h>
+#include <unistd.h>
 
 #include "server.h"
+#include "../include/BoardState.h"
+#include "../include/SnakeFood.h"
+#include "../include/SnakeHead.h"
 
 void looper(
         int master_socket,
@@ -139,6 +145,5 @@ void sendToClient(char * buffer,int valread,int sd)
     printf("Read from the client: %s\n", buffer);
     send(sd , buffer , strlen(buffer) , 0 );  // NOTE: sends data back, 
                                                 //one client at a time 
-
 }
 
