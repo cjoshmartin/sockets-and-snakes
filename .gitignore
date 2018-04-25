@@ -5,3 +5,6 @@ build/*
 !build/.gitkeep
 binary/*
 !binary/.gitkeep
+source/.idea/*
+source/cmake-build-debug/*
+source/CMakeLists.txt

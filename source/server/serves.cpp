@@ -9,7 +9,6 @@
 #include <unistd.h>
 
 #include "server.h"
-#include "../include/BoardState.h"
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
@@ -18,7 +17,8 @@ void looper(
         int max_clients,
         int* client_socket,
         struct sockaddr_in address,
-        int addrlen
+        int addrlen,
+        BoardState startState
         )
 {
     fd_set readfds;
