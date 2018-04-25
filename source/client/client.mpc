@@ -1,0 +1,10 @@
+project (client) {
+  exename = client 
+  install = .
+ 
+  Source_Files {
+    buildflags = -g -lcurses
+    *.cpp
+  }
+
+}
