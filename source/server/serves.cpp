@@ -7,19 +7,13 @@
 #include <sys/socket.h> 
 #include <string.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "server.h"
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(
-        int master_socket,
-        int max_clients,
-        int* client_socket,
-        struct sockaddr_in address,
-        int addrlen,
-        BoardState startState
-        )
+void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState)
 {
     fd_set readfds;
 
@@ -33,7 +27,7 @@ void looper(
     void * buffer;  //data buffer of 1K 
 
     //a message 
-    char *message = "ECHO Daemon v1.0 \r\n";  
+    char *message = "Welcome! We are waiting for another player  to show up\r\n";
 
     //clear the socket set 
     FD_ZERO(&readfds);  
@@ -82,7 +76,7 @@ void looper(
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
         //send new connection greeting message 
-        if( send(new_socket, message, strlen(message), 0) != strlen(message) )  
+        if( send(new_socket, startState, sizeof(startState), 0) != sizeof(startState))
         {  
             perror("send");  
         }  
@@ -93,12 +87,13 @@ void looper(
         for (i = 0; i < max_clients; i++)  
         {  
             //if position is empty 
-            if( client_socket[i] == 0 )  
-            {  
-                client_socket[i] = new_socket;  
-                printf("Adding to list of sockets as %d\n" , i);  
+            if( client_socket[i] == 0 )   // <--TODO:check if client has never connected before
+            {
+                client_socket[i] = new_socket;
+                char *message = "HELLO, TEST ECHO\n";
+//                send(client_socket[i], startState,sizeof(BoardState),0);
 
-                break;  
+                break;
             }  
         }  
     }  
@@ -117,7 +112,7 @@ void looper(
                 //Somebody disconnected , get his details and print 
                 getpeername(sd , (struct sockaddr*)&address , \
                         (socklen_t*)&addrlen);  
-                printf("Host disconnected , ip %s , port %d \n" , 
+                printf("Client disconnected , ip %s , port %d \n" ,
                         inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
                 //Close the socket and mark as 0 in list for reuse 
@@ -127,12 +122,12 @@ void looper(
 
             //Echo back the message that came in 
             else
-            {  
-                sendToClient(buffer,valread,sd);
-
-            }// end of else statement  
+            {
+                    sendToClient(buffer, valread, sd);
+            }// end of else statement
         }// end of outer if statement  
-    } // end of for loop, looping over max_clients  
+    } // end of for loop, looping over max_clients
+
 } //end of looper
 
 

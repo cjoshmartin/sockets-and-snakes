@@ -14,9 +14,10 @@
 #include <signal.h>
 
 #include "server.h"
+#include "../include/BoardState.h"
 
-#define TRUE   1
-#define FALSE  0
+#define TRUE   true
+#define FALSE  false
 #define PORT 9888// 1025 - 32000
 
 
@@ -26,8 +27,8 @@ int main(int argc , char *argv[])
 
     int master_socket ,
         addrlen ,
-        client_socket[30] , 
-        max_clients = 30 ,
+        client_socket[2] ,
+        max_clients = 2 ,
         i;  
 
     struct sockaddr_in address;  
@@ -100,12 +101,14 @@ int main(int argc , char *argv[])
     addrlen = sizeof(address);  
     puts("Waiting for connections ...");  
 
-    BoardState startState; // board state 
+
+    BoardState  startState;
+    
 
     //set of socket descriptors 
     while(TRUE)  
-    {  
-        looper(/*readfds,*/ master_socket, max_clients,client_socket,address,addrlen, BoardState startState);
+    {
+        looper(master_socket, max_clients, client_socket, address, addrlen, (void *)(&startState));
     } // end of while(TRUE) 
 
     return 0;  

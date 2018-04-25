@@ -5,7 +5,7 @@ project (server) {
   Source_Files {
     buildflags = -g -lcurses
     *.cpp
-  
+    ../*.cpp 
     }
  Header_Files {
 	../../include/*.h
