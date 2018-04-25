@@ -1,14 +1,15 @@
 /* timeclnt.c - a client for timeserv.c
  *              usage: timeclnt hostname portnumber
  */
-#include       <stdio.h>
-#include       <sys/types.h>
-#include       <sys/socket.h>
-#include       <netinet/in.h>
-#include       <netdb.h>
-#include	<stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdlib.h>
 #include <strings.h>
 #include <string.h>
+#include <unistd.h>
 
 #define        oops(msg)       { perror(msg); exit(1); }
 

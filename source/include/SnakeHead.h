@@ -3,6 +3,16 @@
  *
  */
 
+#ifndef _SNAKEHEAD_H
+#define _SNAKEHEAD_H
+
+enum Direction{
+	Up,
+	Right,
+	Down,
+	Left
+};
+
 class SnakeHead {
 	private:
 		int x_pos, y_pos; 	// The position of the snake head on the screen
@@ -12,4 +22,11 @@ class SnakeHead {
 	public:
 		SnakeHead();
 		~SnakeHead();
+
+		void updatePos();
+		void setDir(int newdir);
+		int getXPos();
+		int getYPos();
 };
+
+#endif
