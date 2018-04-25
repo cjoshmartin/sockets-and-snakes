@@ -22,10 +22,11 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
         valread,
         sd,
         new_socket,
-        i;  
+        i;
 
-    void * buffer;  //data buffer of 1K 
-
+    char buffer[1025];
+//     BoardState state;  //data buffer of 1K
+//    void * state;
     //a message 
     char *message = "Welcome! We are waiting for another player  to show up\r\n";
 
@@ -99,47 +100,51 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
     }  
 
     //else its some IO operation on some other socket
-    for (i = 0; i < max_clients; i++)  
-    {  
-        sd = client_socket[i];  
+    for (i = 0; i < max_clients; i++)
+    {
+        sd = client_socket[i];
 
-        if (FD_ISSET( sd , &readfds))  
-        {  
-            //Check if it was for closing , and also read the 
-            //incoming message 
-            if ((valread = read( sd , buffer, 1024)) == 0)  
-            {  
-                //Somebody disconnected , get his details and print 
+        if (FD_ISSET( sd , &readfds))
+        {
+            //Check if it was for closing , and also read the
+            //incoming message
+            if ((valread = read( sd ,buffer, sizeof(BoardState))) == 0)
+            {
+                //Somebody disconnected , get his details and print
                 getpeername(sd , (struct sockaddr*)&address , \
-                        (socklen_t*)&addrlen);  
+                        (socklen_t*)&addrlen);
                 printf("Client disconnected , ip %s , port %d \n" ,
-                        inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
+                        inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
 
-                //Close the socket and mark as 0 in list for reuse 
-                close( sd );  
-                client_socket[i] = 0;  
-            }  
+                //Close the socket and mark as 0 in list for reuse
+                close( sd );
+                client_socket[i] = 0;
+            }
 
-            //Echo back the message that came in 
+            //Echo back the message that came in
             else
             {
-                    sendToClient(buffer, valread, sd);
+                std::cout << "bam!" << "\n";
+                BoardState test;
+                memcpy(&test, buffer, valread);
+//                BoardState  test = (BoardState *)state;
+                std::cout << test.test_string << "\n";
+
+//                    sendToClient((BoardState *)state, valread, sd);
             }// end of else statement
-        }// end of outer if statement  
+        }// end of outer if statement
     } // end of for loop, looping over max_clients
 
 } //end of looper
 
 
-void sendToClient(void * buffer,int valread,int sd)
+void sendToClient(BoardState state, int valread, int sd)
 {
-
-    BoardState * state = (BoardState *)buffer;
-
-    //set the string terminating NULL byte on the end 
+//    std::cout << state.test_string << "\n";
+    //set the string terminating NULL byte on the end
     //of the data read 
     //printf("Read from the client: %s\n", buffer);
-    send(sd , buffer , sizeof(buffer), 0 );  // NOTE: sends data back, 
+//    send(sd , (void *)&state , sizeof(BoardState), 0 );  // NOTE: sends data back,
                                                 //one client at a time 
 }
 
