@@ -12,12 +12,13 @@
 #----------------------------------------------------------------------------
 
 
-all: client
+all: client straight_client-target
 
-depend: client-depend
+depend: client-depend straight_client-target-depend
 
 clean generated realclean check-syntax $(CUSTOM_TARGETS):
 	@$(MAKE) -f Makefile.client $(@)
+	@cd straight_client && $(MAKE) -f Makefile.straight_client $(@)
 
 .PHONY: client
 client:
@@ -27,5 +28,14 @@ client:
 client-depend:
 	@$(MAKE) -f Makefile.client depend
 
+.PHONY: straight_client-target
+straight_client-target:
+	@cd straight_client && $(MAKE) -f Makefile.straight_client all
+
+.PHONY: straight_client-target-depend
+straight_client-target-depend:
+	@cd straight_client && $(MAKE) -f Makefile.straight_client depend
+
 project_name_list:
 	@echo client
+	@echo straight_client-target

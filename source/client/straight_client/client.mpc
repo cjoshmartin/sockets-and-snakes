@@ -1,4 +1,4 @@
-project (client) {
+project (straight_client) {
   exename = client 
   install = .
  

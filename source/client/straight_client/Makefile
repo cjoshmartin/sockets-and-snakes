@@ -7,25 +7,25 @@
 # this file will be lost the next time it is generated.
 #
 # MPC Command:
-# /home/chajmart/MPC/mwc.pl -type make
+# /home/nat/Code/MPC/MPC/mwc.pl -type make
 #
 #----------------------------------------------------------------------------
 
 
-all: client
+all: straight_client
 
-depend: client-depend
+depend: straight_client-depend
 
 clean generated realclean check-syntax $(CUSTOM_TARGETS):
-	@$(MAKE) -f Makefile.client $(@)
+	@$(MAKE) -f Makefile.straight_client $(@)
 
-.PHONY: client
-client:
-	@$(MAKE) -f Makefile.client all
+.PHONY: straight_client
+straight_client:
+	@$(MAKE) -f Makefile.straight_client all
 
-.PHONY: client-depend
-client-depend:
-	@$(MAKE) -f Makefile.client depend
+.PHONY: straight_client-depend
+straight_client-depend:
+	@$(MAKE) -f Makefile.straight_client depend
 
 project_name_list:
-	@echo client
+	@echo straight_client
