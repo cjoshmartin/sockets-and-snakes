@@ -5,8 +5,16 @@
 #include "include/SnakeHead.h"
 
 // Default constructor
-SnakeHead::SnakeHead() : x_pos(0), y_pos(0), dir(Up), length(0) {
+SnakeHead::SnakeHead() : x_pos(0), y_pos(0), dir(Down), length(0) {
 
+}
+
+// Copy constructor
+SnakeHead::SnakeHead(const SnakeHead& rhs) {
+	this->x_pos = rhs.getXPos();
+	this->y_pos = rhs.getYPos();
+	this->length = rhs.getLength();
+	this->dir = rhs.getDir();
 }
 
 // Destructor
@@ -19,14 +27,24 @@ SnakeHead::SnakeHead(int xpos, int ypos) : x_pos(xpos), y_pos(ypos), dir(Up), le
 
 }
 
+// Returns the snake's direction of travel
+int SnakeHead::getDir(void) const {
+	return dir;
+}
+
 // Returns the X position of the head
-int SnakeHead::getXPos(void) {
+int SnakeHead::getXPos(void) const {
 	return x_pos;
 }
 
 // Returns the Y position of the head
-int SnakeHead::getYPos(void) {
+int SnakeHead::getYPos(void) const {
 	return y_pos;
+}
+
+// Returns the length of the snake
+int SnakeHead::getLength(void) const {
+	return length;
 }
 
 // Update the position according to the direction
@@ -64,11 +82,6 @@ void SnakeHead::setDir(int newdir) {
 // Increases the length of the snake by 1
 void SnakeHead::addLength(void) {
 	length++;
-}
-
-// Returns the length of the snake
-int SnakeHead::getLength(void) {
-	return length;
 }
 
 // Sets the position of the snake's head

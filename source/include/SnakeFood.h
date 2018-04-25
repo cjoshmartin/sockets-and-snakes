@@ -7,7 +7,12 @@
 
 #define X_SIZE 78
 #define Y_SIZE 22
+
 #include <cstdlib>
+
+#define FOODCHAR '*'
+
+
 #include <math.h>
 
 class SnakeFood {
