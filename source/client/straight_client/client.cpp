@@ -3,6 +3,7 @@
  */
 #include <iostream>
 #include       <stdio.h>
+#include <string.h>
 #include  	   <string.h>
 #include       <sys/types.h>
 #include       <sys/socket.h>
@@ -60,10 +61,18 @@ int main(int ac, char *av[])
      * Step 3: transfer data from server, then hangup
      */
 
-	messlen = read(sock_id, (void *)(&incoming_state), sizeof(BoardState));     /* read stuff   */
+        char buffer[1025];
+	messlen = read(sock_id, buffer, sizeof(BoardState));     /* read stuff   */
 	if ( messlen == - 1 )
 	oops("read") ;
+        memcpy(&incoming_state,buffer,messlen);
 	std::cout << incoming_state.test_string << "\n";
+        incoming_state.test_string = "hello from the client";
+        
+        memcpy(buffer, &incoming_state,messlen);
+        if ( send( sock_id,buffer , messlen,0) != messlen )  /* and write to */
+            oops( "write" );                        /* stdout       */
+
 //	incoming_state.test_string = "Welcome from the client";
 //	if ( write( sock_id, (void *)&incoming_state, messlen ) != messlen )  /* and write to */
 //	       oops( "write" );                        /* stdout       */
