@@ -14,51 +14,50 @@
 #include <string.h>
 #include <sys/time.h>
 
-// Global update flag to control the timing of the system. Set to "true"
-//  by the alarm handler so that refresh does not occur more often than
-//  once every 0.1 seconds.
-bool drawFlag = true;
-
-void handle(int signum);
-void alarmHandle(int signum);
 void UpdateBoard(BoardState& theBoard);
-int timedif(struct timeval start, struct timeval end);
 
 int main(void) {
-	// Initialize board and draw borders
 	// Initialize communication
 	// Initialize players based on comms (which player I am, 1 or 2)
-	// Set up alarm and stuff
 	// Wait for input and update position accordingly
 
 	// Time-storing variables to enforce minimum refresh time
 	struct timeval start, end;
 
-	// Install signal handlers: ^C and alarm
-	signal(SIGINT, handle);
+	// Initialize communication
 
 	// Initialize board and current player according to initial communication
-	SnakeBoard myBoard;
-	myBoard.setCurrentPlayer(1);
-	BoardState newBoard;
-	int i = 20;
+	SnakeBoard gameBoard;
+	gameBoard.setCurrentPlayer(1);
+	BoardState boardState;
 
-	// Set refresh rate
-	//set_ticker(100);
+	// Install ^C handler
+	signal(SIGINT, killHandle);
 
-	drawFlag = true;
-	while (i) {
+	while (1) {
+		// Start timing loop
 		gettimeofday(&start, NULL);
-		UpdateBoard(newBoard);
-		myBoard.update(newBoard);
-		myBoard.draw();
-		newBoard = myBoard.collectInput(newBoard);
+
+		// Update the board from the server
+		UpdateBoard(boardState);
+
+		// Update the graphical board from the state
+		gameBoard.update(boardState);
+
+		// Draw the board on the screen
+		gameBoard.draw();
+
+		// Collect input from the board and update the state
+		boardState = gameBoard.collectInput(boardState);
+
+		// Send new state to the server
+		//SendState(boardState);
 		
-		// Enforce minimum elapsed time of 100 ms
+		// Enforce minimum elapsed time of 80 ms by waiting for that time
 		double diff;
 		do {
 			gettimeofday(&end, NULL);
-		} while (timedif(start, end) < 70000);
+		} while (timedif(start, end) < 80000);
 	}
 
 	// Update the board and draw
@@ -69,13 +68,3 @@ void UpdateBoard(BoardState& theBoard) {
 	theBoard.update();
 }
 
-// Control-c handler
-void handle(int signum) {
-	endwin();
-	exit(1);
-}
-
-// Calculates the time difference between two different struct timeval structures. Returns the number of milliseconds
-int timedif(struct timeval start, struct timeval end) {
-	return (end.tv_sec*1000000 + end.tv_usec) - (start.tv_sec*1000000 + start.tv_usec);
-}

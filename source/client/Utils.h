@@ -5,6 +5,9 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
-int set_ticker( int n_msecs );
+#include <cstdlib>
+
+void killHandle(int signum);
+int timedif(struct timeval start, struct timeval end);
 
 #endif

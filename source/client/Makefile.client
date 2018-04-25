@@ -31,8 +31,8 @@ LIBPREFIX     = lib
 LIBSUFFIX     = 
 GENFLAGS      = -O
 LDLIBS        = -ldl $(subst lib,-l,$(sort $(basename $(notdir $(wildcard /usr/lib/librt.so /lib/librt.so))))) -lpthread
-OBJS          = main$(OBJEXT) set_ticker$(OBJEXT) Snake$(OBJEXT) SnakeBoard$(OBJEXT) TailSeg$(OBJEXT) timeclnt$(OBJEXT) ../BoardState$(OBJEXT) ../SnakeFood$(OBJEXT) ../SnakeHead$(OBJEXT)
-SRC           = main.cpp set_ticker.cpp Snake.cpp SnakeBoard.cpp TailSeg.cpp timeclnt.cpp ../BoardState.cpp ../SnakeFood.cpp ../SnakeHead.cpp
+OBJS          = main$(OBJEXT) Snake$(OBJEXT) SnakeBoard$(OBJEXT) TailSeg$(OBJEXT) timeclnt$(OBJEXT) Utils$(OBJEXT) ../BoardState$(OBJEXT) ../SnakeFood$(OBJEXT) ../SnakeHead$(OBJEXT)
+SRC           = main.cpp Snake.cpp SnakeBoard.cpp TailSeg.cpp timeclnt.cpp Utils.cpp ../BoardState.cpp ../SnakeFood.cpp ../SnakeHead.cpp
 LINK.cc       = $(LD) $(LDFLAGS)
 EXPORTFLAGS   = 
 DEPLIBS       = $(foreach lib, , $(foreach libpath, ., $(wildcard $(libpath)/lib$(lib).a)))
@@ -53,9 +53,6 @@ generated: $(GENERATED_DIRTY)
 main$(OBJEXT): main.cpp
 	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) main.cpp
 
-set_ticker$(OBJEXT): set_ticker.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) set_ticker.cpp
-
 Snake$(OBJEXT): Snake.cpp
 	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) Snake.cpp
 
@@ -67,6 +64,9 @@ TailSeg$(OBJEXT): TailSeg.cpp
 
 timeclnt$(OBJEXT): timeclnt.cpp
 	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
+
+Utils$(OBJEXT): Utils.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) Utils.cpp
 
 ../BoardState$(OBJEXT): ../BoardState.cpp
 	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../BoardState.cpp
