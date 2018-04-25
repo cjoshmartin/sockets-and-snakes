@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <cstdlib>
 #include <signal.h>
+#include <string.h>
 
 // Global update flag to control the timing of the system. Set to "true"
 //  by the alarm handler so that refresh does not occur more often than
