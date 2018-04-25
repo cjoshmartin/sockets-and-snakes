@@ -32,6 +32,6 @@ int SnakeFood::getYPos(void) {
 
 // Assigns a random value to the x and y position
 void SnakeFood::randPos() {
-	x_pos = rand() % X_SIZE + 1
+	x_pos = rand() % X_SIZE + 1;
 	y_pos = rand() % Y_SIZE + 1;
 }

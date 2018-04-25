@@ -8,27 +8,31 @@
 #ifndef _BOARD_H
 #define _BOARD_H
 
+#include "Snake.h"
+#include "../include/SnakeFood.h"
+#include "../include/BoardState.h"
 #include <curses.h>
 
 #define SCREEN_WIDTH 80
 #define SCREEN_HEIGHT 24
-#define X_SIZE 78
-#define Y_SIZE 22
 #define BORDER_EDGE '-'
 #define BORDER_CORNER '+'
 #define BORDER_SIDE '|'
 
 class SnakeBoard {
 	private:
-		Player player1;
-		Player player2;
+		int currentPlayer;
+		Snake player1;
+		Snake player2;
+		SnakeFood food;
 
 	public:
 		SnakeBoard();
 		~SnakeBoard();
 
-		void initPlayers(void);
-		update(Player& player1, Player& player2);
+		void setCurrentPlayer(int playerNum);
+		BoardState update(BoardState& state);
+		void draw(void);
 };
 
 #endif

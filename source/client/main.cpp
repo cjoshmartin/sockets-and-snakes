@@ -16,5 +16,6 @@ int main(void) {
 	// Set up alarm and stuff
 	// Wait for input and update position accordingly
 	SnakeBoard myBoard;
+	myBoard.draw();
 	sleep(3);
 }

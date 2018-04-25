@@ -3,6 +3,8 @@
  *  client to synchronize board states in clients.
  */
 
+#include "include/BoardState.h"
+
 // Default constructor
 BoardState::BoardState() : game_on(true), player1_alive(true), player2_alive(true), winner(-1) {
 	player_1.setPos(PLAYER_1_X, PLAYER_1_Y);

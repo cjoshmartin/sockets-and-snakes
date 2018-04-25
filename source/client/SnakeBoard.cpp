@@ -42,3 +42,16 @@ SnakeBoard::SnakeBoard() {
 SnakeBoard::~SnakeBoard() {
 	endwin();
 }
+
+// Update the local board given a BoardState (from the server)
+BoardState SnakeBoard::update(BoardState& newstate) {
+	// Update player 1 and 2's snake heads
+	// Eat food
+	// Return updated state
+}
+
+// Draw the board on the screen according to the board's state
+void SnakeBoard::draw(void) {
+	player1.draw();
+	player2.draw();
+}
