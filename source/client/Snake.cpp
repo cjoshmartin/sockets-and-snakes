@@ -25,7 +25,10 @@ void Snake::draw(void) {
 	// Replace old head position with tail char.
 	if (last_x != -1 && last_y != -1) {
 		//mvaddch(last_y, last_x, TAILCHAR);
-		mvaddch(last_y, last_x, ' ');
+		if (head.getLength() == 0)
+			mvaddch(last_y, last_x, ' ');
+		else
+			mvaddch(last_y, last_x, TAILCHAR);
 	}
 
 	// Draw new head
