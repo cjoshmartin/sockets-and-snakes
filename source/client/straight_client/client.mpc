@@ -1,0 +1,14 @@
+project (client) {
+  exename = client 
+  install = .
+ 
+  Source_Files {
+    *.cpp
+	*.cpp
+        ../../*.cpp
+  }
+  Header_Files {
+	../../include/*.h
+  }
+
+}
