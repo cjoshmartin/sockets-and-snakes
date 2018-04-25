@@ -4,13 +4,14 @@
  */
 
 #include "include/BoardState.h"
+#include <string.h>
 
 // Default constructor
 BoardState::BoardState() : game_on(true), player1_alive(true), player2_alive(true), winner(-1) {
 	player_1.setPos(PLAYER_1_X, PLAYER_1_Y);
 	player_2.setPos(PLAYER_2_X, PLAYER_2_Y);
 	snake_food.randPos();
-	test_string = "Welcome Player!";
+	strncpy(test_string, "Welcome Player!", 1024);
 }
 
 // Destructor

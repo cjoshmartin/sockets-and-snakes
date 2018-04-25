@@ -16,50 +16,61 @@
 
 void UpdateBoard(BoardState& theBoard);
 
-int main(void) {
-	// Initialize communication
-	// Initialize players based on comms (which player I am, 1 or 2)
-	// Wait for input and update position accordingly
-
+int main(int ac, char* av[]) {
 	// Time-storing variables to enforce minimum refresh time
 	struct timeval start, end;
 
-        int playerNum = 1;
-        bool playing;
+	// Is the game still going?
+	bool playing;
 
 	// Initialize board and current player according to initial communication
 	SnakeBoard gameBoard;
 	BoardState boardState;
 
-	// Initialize communication
-        //playerNum = initCommuniation()
+	// Connection parameters
+	char* hostname;
+	int portnum;
 
-        // Set local player number
-	gameBoard.setCurrentPlayer(playerNum);
+	
+	// Check command-line arguments
+	if (ac < 3) {
+		printf("Usage: %s [hostname] [portnum]\n", av[0]);
+		exit(1);
+	}
+
+	// Get hostname and port number from command line arguments
+	portnum = atoi(av[2]);
+	hostname = av[1];
+
+	// Initialize the connection with the server and set the player number
+	gameBoard.initConnection(hostname, portnum);
 
 	// Install ^C handler
 	signal(SIGINT, killHandle);
 
-        // Loop until win
-        playing = true;
+	// Initialize Curses
+	gameBoard.initScreen();
+
+	// Loop until win
+	playing = true;
 	while (playing) {
 		// Start timing loop
 		gettimeofday(&start, NULL);
 
 		// Update the board from the server
-		UpdateBoard(boardState); // get from client side
+		gameBoard.getState(); // get from client side
 
 		// Update the graphical board from the state
-		playing = gameBoard.update(boardState);
+		playing = gameBoard.update();
 
 		// Draw the board on the screen
 		gameBoard.draw();
 
 		// Collect input from the board and update the state
-		boardState = gameBoard.collectInput(boardState);
+		gameBoard.collectInput();
 
 		// Send new state to the server
-		//SendState(boardState); // Send from client side
+		gameBoard.sendState(); // Send from client side
 		
 		// Enforce minimum elapsed time of 80 ms by waiting for that time
 		double diff;

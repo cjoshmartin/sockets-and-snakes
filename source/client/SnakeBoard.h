@@ -12,6 +12,13 @@
 #include "../include/SnakeFood.h"
 #include "../include/BoardState.h"
 #include <curses.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <time.h>
 
 #define SCREEN_WIDTH 80
 #define SCREEN_HEIGHT 24
@@ -21,7 +28,10 @@
 
 class SnakeBoard {
 	private:
+		int sock_id;
 		int currentPlayer;
+		bool won;
+		BoardState internalState;
 		Snake player1;
 		Snake player2;
 		SnakeFood food;
@@ -30,9 +40,12 @@ class SnakeBoard {
 		SnakeBoard();
 		~SnakeBoard();
 
-		void setCurrentPlayer(int playerNum);
-		BoardState update(BoardState& state);
-		BoardState collectInput(BoardState oldState);
+		void initConnection(char* hostname, int port);
+		void initScreen(void);
+		void getState(void);
+		bool update(void);
+		void collectInput(void);
+		void sendState(void);
 		void draw(void);
 };
 

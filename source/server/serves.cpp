@@ -75,8 +75,9 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
         //send new connection greeting message
-        memcpy(buffer,&startState, sizeof(BoardState));
-        if( send(new_socket, buffer, sizeof(BoardState), 0) != sizeof(startState))
+        //memcpy(buffer,&startState, sizeof(BoardState));
+		int hello = 42;
+        if( send(new_socket, &hello, sizeof(int), 0) != sizeof(startState))
         {  
             perror("send");  
         }  

@@ -3,17 +3,25 @@
  *  necessary functions to use the library.
  */
 
+#include <time.h>
 #include "SnakeBoard.h"
 
 // Initialize curses environment, draw border, initialize player positions based
 //  on initial values
 SnakeBoard::SnakeBoard() {
+}
+
+// Destroy curses board
+SnakeBoard::~SnakeBoard() {
+	endwin();
+}
+
+// Initializes the Curses screen
+void SnakeBoard::initScreen(void) {
 	// Initialize curses environment
 	initscr();
 	noecho();
 	timeout(1);
-	//cbreak();
-	//nodelay(stdscr, false);
 	curs_set(0);
 
 	// Top row border
@@ -40,35 +48,106 @@ SnakeBoard::SnakeBoard() {
 	refresh();
 }
 
-// Destroy curses board
-SnakeBoard::~SnakeBoard() {
-	endwin();
-}
+// Initialize a connection to the server
+void SnakeBoard::initConnection(char* hostname, int port) {
+	struct sockaddr_in  servadd;        /* the number to call */
+	struct hostent      *hp;            /* used to get number */
+	int    sock_id, sock_fd;            /* the socket and fd  */
+	int    messlen;                     /* length of received message*/
 
-// Update the local board given a BoardState (from the server)
-BoardState SnakeBoard::update(BoardState& newState) {
-	// Check for game over
-	if (newState.game_on) {
-		// Update player 1 and 2's snake heads
-		player1.newHead(newState.player_1);
-		player2.newHead(newState.player_2);
+	int i;
+	char clientid[4];
 
-		// Check for death
+	// Make a random ID for this client
+	srand(time(NULL));
+	sprintf(clientid, "%d", rand()%1000);
 
-		// New food posititon
-		food = newState.snake_food;
+	//
+    // Step 1: Get a socket as member variable and error-check
+	//
+	sock_id = socket( AF_INET, SOCK_STREAM, 0 );    
+	if ( sock_id == -1 ) {
+		perror("socket");
+		exit(1);
+	}
+	printf("Obtained socket\n");
 
-		// Return updated state
+	//
+    // Step 2: Connect to the server after building server's address (host, port)
+	//
+	bzero( &servadd, sizeof( servadd ) );   /* zero the address     */
 
-	// Else, win has occurred.
-	} else {
-		// Win state
+	// Obtain host IP and error-check
+	hp = gethostbyname( hostname );
+	if (hp == NULL) {
+		perror(hostname);
+		exit(1);
+	}
+	printf("Obtained host from hostname: %s\n", hostname);
+
+	// Copy server address into servadd's address
+	bcopy(hp->h_addr, (struct sockaddr *)&servadd.sin_addr, hp->h_length);
+	printf("Copied hp->haddr to serveradd.sin_addr\n");
+	servadd.sin_port = htons(port);  		/* fill in port number  */
+	printf("Filled in port: %d\n", port);
+	servadd.sin_family = AF_INET ;          /* fill in socket type  */
+
+	// Dial connection to server
+	printf("Connecting to server...\n");
+	if ( connect(sock_id, (struct sockaddr *)&servadd, sizeof(servadd)) != 0) {
+		perror("connect");
+		exit(1);
+	}
+
+	//
+	// Step 3: Receive player id (1 or 2) from server
+	//
+	messlen = read(sock_id, &currentPlayer, sizeof(int));
+	printf("Current player is %d\n", currentPlayer);
+	if (messlen <= 0) {
+		perror("connection read");
+		exit(1);
+	} else if (messlen != sizeof(int)) {
+		printf("Issues, homei!\n");
 	}
 }
 
-// Sets the current player (i.e., which one is controlled by keypresses)
-void SnakeBoard::setCurrentPlayer(int playerNum) {
-	currentPlayer = playerNum;
+// Receive a new BoardState from the server and update internally
+void SnakeBoard::getState(void) {
+	// Receive from server
+}
+
+// Send updated state to the server
+void SnakeBoard::sendState(void) {
+
+}
+
+// Update the local board given a BoardState (from the server)
+bool SnakeBoard::update() {
+	// Check for game over
+	if (internalState.game_on) {
+		// Update player 1 and 2's snake heads
+		player1.newHead(internalState.player_1);
+		player2.newHead(internalState.player_2);
+
+		// New food posititon
+		food = internalState.snake_food;
+
+	// Else, win has occurred by one player and game is over
+	} else {
+		// Print win message depending on player
+		if (internalState.winner == currentPlayer) {
+			won = true;
+		} else {
+			won = false;
+		}
+
+		// Do not keep playing
+		return false;
+	}
+
+	// Keep playing (true to keep looping)
+	return true;
 }
 
 // Draw the board on the screen according to the board's state
@@ -84,7 +163,7 @@ void SnakeBoard::draw(void) {
 
 // Collect nonblocking terminal input from the user and return BoardState based
 //  on this input. Also modifies the current player's head.
-BoardState SnakeBoard::collectInput(BoardState oldState) {
+void SnakeBoard::collectInput(void) {
 	int newdir = -1;
 	char ch;
 
@@ -115,10 +194,8 @@ BoardState SnakeBoard::collectInput(BoardState oldState) {
 	if (newdir != -1) {
 		// Set direction for current player
 		if (currentPlayer == 1)
-			oldState.player_1.setDir(newdir);
+			internalState.player_1.setDir(newdir);
 		else
-			oldState.player_2.setDir(newdir);
+			internalState.player_2.setDir(newdir);
 	}
-	
-	return oldState;
 }
