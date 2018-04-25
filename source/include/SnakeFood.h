@@ -6,7 +6,7 @@
 #define _SNAKEFOOD_H
 
 #define X_SIZE 78
-#define Y_SIZE 38
+#define Y_SIZE 22
 
 #include <math.h>
 

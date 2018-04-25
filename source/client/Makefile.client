@@ -16,7 +16,7 @@ CCC           = $(CXX)
 MAKEFILE      = Makefile.client
 DEPENDENCIES  = .depend.$(MAKEFILE)
 BTARGETDIR    = ./
-BIN           = $(BTARGETDIR)timeclnt$(EXESUFFIX)$(EXEEXT)
+BIN           = $(BTARGETDIR)client$(EXESUFFIX)$(EXEEXT)
 CAT           = cat
 MV            = mv -f
 RM            = rm -rf
@@ -31,8 +31,8 @@ LIBPREFIX     = lib
 LIBSUFFIX     = 
 GENFLAGS      = -O
 LDLIBS        = -ldl $(subst lib,-l,$(sort $(basename $(notdir $(wildcard /usr/lib/librt.so /lib/librt.so))))) -lpthread
-OBJS          = timeclnt$(OBJEXT) SnakeQueue$(OBJEXT) queuetest$(OBJEXT) TailSeg$(OBJEXT)
-SRC           = timeclnt.cpp SnakeQueue.cpp queuetest.cpp TailSeg.cpp
+OBJS          = main$(OBJEXT) SnakeBoard$(OBJEXT) TailSeg$(OBJEXT) timeclnt$(OBJEXT)
+SRC           = main.cpp SnakeBoard.cpp TailSeg.cpp timeclnt.cpp
 LINK.cc       = $(LD) $(LDFLAGS)
 EXPORTFLAGS   = 
 DEPLIBS       = $(foreach lib, , $(foreach libpath, ., $(wildcard $(libpath)/lib$(lib).a)))
@@ -50,17 +50,17 @@ $(BIN): $(OBJS) $(DEPLIBS)
 generated: $(GENERATED_DIRTY)
 	@-:
 
-timeclnt$(OBJEXT): timeclnt.cpp
-	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
+main$(OBJEXT): main.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) main.cpp
 
-SnakeQueue$(OBJEXT): SnakeQueue.cpp
-	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) SnakeQueue.cpp
-
-queuetest$(OBJEXT): queuetest.cpp
-	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) queuetest.cpp
+SnakeBoard$(OBJEXT): SnakeBoard.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) SnakeBoard.cpp
 
 TailSeg$(OBJEXT): TailSeg.cpp
-	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) TailSeg.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) TailSeg.cpp
+
+timeclnt$(OBJEXT): timeclnt.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
 
 clean:
 	-$(RM) $(OBJS)
