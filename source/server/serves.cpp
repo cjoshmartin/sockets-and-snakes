@@ -76,8 +76,9 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
         printf("New connection , socket fd is %d , ip is : %s , port : %d\n" ,
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
-        //send new connection greeting message 
-        if( send(new_socket, startState, sizeof(startState), 0) != sizeof(startState))
+        //send new connection greeting message
+        memcpy(buffer,&startState, sizeof(startState));
+        if( send(new_socket, buffer, sizeof(startState), 0) != sizeof(startState))
         {  
             perror("send");  
         }  
@@ -127,8 +128,7 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 std::cout << "bam!" << "\n";
                 BoardState test;
                 memcpy(&test, buffer, valread);
-//                BoardState  test = (BoardState *)state;
-                std::cout << test.test_string << "\n";
+                std::cout << test.test_string<< "\n";
 
 //                    sendToClient((BoardState *)state, valread, sd);
             }// end of else statement

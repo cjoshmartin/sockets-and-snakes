@@ -84,6 +84,7 @@ int main(int argc , char *argv[])
 
 
     BoardState  startState;
+    startState.test_string = "test is a test";
     
 
     //set of socket descriptors 
