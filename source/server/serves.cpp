@@ -17,7 +17,8 @@ void looper(
         int max_clients,
         int* client_socket,
         struct sockaddr_in address,
-        int addrlen
+        int addrlen,
+        BoardState startState
         )
 {
     fd_set readfds;
