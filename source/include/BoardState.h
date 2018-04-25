@@ -5,21 +5,28 @@
  * Authors: Josh Martin and Nathaniel Cantwell
  */
 
+#ifndef _BOARDSTATE_H
+#define _BOARDSTATE_H
+
+#define DRAW 0 		// No winner is 0. Else, 1 or 2 (which player)
+
 #include "SnakeFood.h"
 #include "SnakeHead.h"
 
 class BoardState {
 	private:
-		int game_state; 	// Flag to determine if the game is still going on
+		int winner;
+		bool game_on; 	// Flag to determine if the game is still going on
+		bool player1_alive, player2_alive;
 		SnakeHead player_1;
-		int player_1_score;
 		SnakeHead player_2;
-		int player_2_score;
 		SnakeFood snake_food;
 
 	public:
 		BoardState();
 		~BoardState();
 
-		//void updateState();
+		void updateState();
 };
+
+#endif

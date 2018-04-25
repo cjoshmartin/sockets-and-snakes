@@ -20,7 +20,7 @@ SnakeHead::SnakeHead(int xpos, int ypos) : x_pos(xpos), y_pos(ypos), dir(Up), le
 }
 
 // Update the position according to the direction
-void SnakeHead::updatePos() {
+bool SnakeHead::updatePos() {
 	// Update position based on current direction
 	switch (dir) {
 		case Up:
@@ -35,9 +35,14 @@ void SnakeHead::updatePos() {
 		case Right:
 			x_pos += 1;
 			break;
-		default:
-			//Why????
 	}
+
+	// Check for collision with walls
+	if (x_pos == 0 || x_pos == X_SIZE-1)
+		return false;
+	if (y_pos == 0 || y_pos == Y_SIZE-1)
+		return false;
+	return true;
 }
 
 // Sets the direction of the snake
@@ -54,4 +59,10 @@ void SnakeHead::addLength(void) {
 // Returns the length of the snake
 int SnakeHead::getLength(void) {
 	return length;
+}
+
+// Sets the position of the snake's head
+void SnakeHead::setPos(int xpos, int ypos) {
+	x_pos = xpos;
+	y_pos = ypos;
 }
