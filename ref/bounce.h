@@ -12,8 +12,8 @@
 #define	Y_INIT		10		/* starting row		*/
 #define	TICKS_PER_SEC	50		/* affects speed	*/
 
-#define	X_TTM		50
-#define	Y_TTM		50
+#define	X_TTM		5
+#define	Y_TTM		8
 
 /** the ping pong ball **/
 

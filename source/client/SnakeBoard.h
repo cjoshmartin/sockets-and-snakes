@@ -14,18 +14,21 @@
 #define SCREEN_HEIGHT 24
 #define X_SIZE 78
 #define Y_SIZE 22
-#define BORDERSYM 'X'
+#define BORDER_EDGE '-'
+#define BORDER_CORNER '+'
+#define BORDER_SIDE '|'
 
 class SnakeBoard {
 	private:
-		//Player& player1;
-		//Player& player2;
+		Player player1;
+		Player player2;
 
 	public:
 		SnakeBoard();
 		~SnakeBoard();
 
-		//update(Player& player1, Player& player2);
+		void initPlayers(void);
+		update(Player& player1, Player& player2);
 };
 
 #endif

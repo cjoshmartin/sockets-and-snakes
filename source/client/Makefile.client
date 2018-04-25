@@ -45,7 +45,7 @@ all: $(BIN)
 
 $(BIN): $(OBJS) $(DEPLIBS)
 	@$(TESTDIRSTART) "$(BTARGETDIR)" $(TESTDIREND) $(MKDIR) "$(BTARGETDIR)"
-	$(LINK.cc) $(OBJS) $(LDLIBS) $(OUTPUT_OPTION)
+	$(LINK.cc) $(OBJS) $(LDLIBS) $(OUTPUT_OPTION) -lcurses
 
 generated: $(GENERATED_DIRTY)
 	@-:
