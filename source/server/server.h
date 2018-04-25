@@ -5,6 +5,6 @@
 
 void sendToClient(void * buffer,int valread,int sd);
 
-void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_in address, int addrlen,
-            BoardState startState, bool *pBoolean);
+void
+looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState);
 #endif

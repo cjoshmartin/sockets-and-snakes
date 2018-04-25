@@ -27,8 +27,8 @@ int main(int argc , char *argv[])
 
     int master_socket ,
         addrlen ,
-        client_socket[30] , 
-        max_clients = 30 ,
+        client_socket[2] ,
+        max_clients = 2 ,
         i;  
 
     struct sockaddr_in address;  
@@ -101,13 +101,14 @@ int main(int argc , char *argv[])
     addrlen = sizeof(address);  
     puts("Waiting for connections ...");  
 
-    BoardState startState; // board state
-    bool isSetup = true;
+
+    BoardState * startState = new BoardState();
+    void * water = (void *)startState;
 
     //set of socket descriptors 
     while(TRUE)  
     {
-        looper(master_socket, max_clients, client_socket, address, addrlen, startState, &isSetup);
+        looper(master_socket, max_clients, client_socket, address, addrlen, water);
     } // end of while(TRUE) 
 
     return 0;  

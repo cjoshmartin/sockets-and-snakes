@@ -13,8 +13,7 @@
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_in address, int addrlen,
-            BoardState startState, bool *pBoolean)
+void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState)
 {
     fd_set readfds;
 
@@ -28,7 +27,7 @@ void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_
     void * buffer;  //data buffer of 1K 
 
     //a message 
-    char *message = "ECHO Daemon v1.0 \r\n";  
+    char *message = "Welcome! We are waiting for another player  to show up\r\n";
 
     //clear the socket set 
     FD_ZERO(&readfds);  
@@ -88,12 +87,13 @@ void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_
         for (i = 0; i < max_clients; i++)  
         {  
             //if position is empty 
-            if( client_socket[i] == 0 )  
-            {  
-                client_socket[i] = new_socket;  
-                printf("Adding to list of sockets as %d\n" , i);  
+            if( client_socket[i] == 0 )   // <--TODO:check if client has never connected before
+            {
+                client_socket[i] = new_socket;
+                char *message = "HELLO, TEST ECHO\n";
+                send(client_socket[i], startState,strlen(message),0);
 
-                break;  
+                break;
             }  
         }  
     }  
@@ -123,18 +123,11 @@ void looper(int master_socket, int max_clients, int client_socket[30], sockaddr_
             //Echo back the message that came in 
             else
             {
-                std::cout <<  "\n"<<(*pBoolean) << "\n";
-                if((*pBoolean)){ // check if server is running setup
-                    ; // do nothing, please homie... just hang in
-                }
-            else {
                     sendToClient(buffer, valread, sd);
-                }
-            }// end of else statement  
+            }// end of else statement
         }// end of outer if statement  
     } // end of for loop, looping over max_clients
 
-    *pBoolean = false; // tells it not running in setup
 } //end of looper
 
 
