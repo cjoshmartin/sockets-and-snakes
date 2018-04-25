@@ -27,6 +27,8 @@ class SnakeHead {
 		void setDir(int newdir);
 		int getXPos();
 		int getYPos();
+		void addLength(void);
+		int getLength(void);
 };
 
 #endif

@@ -41,4 +41,17 @@ void SnakeHead::updatePos() {
 }
 
 // Sets the direction of the snake
+void SnakeHead::setDir(int newdir) {
+	if (dir == Up || dir == down || dir == left || dir == right)
+		dir = newdir;
+}
 
+// Increases the length of the snake by 1
+void SnakeHead::addLength(void) {
+	length++;
+}
+
+// Returns the length of the snake
+int SnakeHead::getLength(void) {
+	return length;
+}
