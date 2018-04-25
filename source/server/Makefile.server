@@ -31,8 +31,8 @@ LIBPREFIX     = lib
 LIBSUFFIX     = 
 GENFLAGS      = -O
 LDLIBS        = -ldl $(subst lib,-l,$(sort $(basename $(notdir $(wildcard /usr/lib/librt.so /lib/librt.so))))) -lpthread
-OBJS          = server$(OBJEXT) serves$(OBJEXT)
-SRC           = server.cpp serves.cpp
+OBJS          = server$(OBJEXT) serves$(OBJEXT) ../BoardState$(OBJEXT) ../SnakeFood$(OBJEXT) ../SnakeHead$(OBJEXT)
+SRC           = server.cpp serves.cpp ../BoardState.cpp ../SnakeFood.cpp ../SnakeHead.cpp
 LINK.cc       = $(LD) $(LDFLAGS)
 EXPORTFLAGS   = 
 DEPLIBS       = $(foreach lib, , $(foreach libpath, ., $(wildcard $(libpath)/lib$(lib).a)))
@@ -55,6 +55,15 @@ server$(OBJEXT): server.cpp
 
 serves$(OBJEXT): serves.cpp
 	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) serves.cpp
+
+../BoardState$(OBJEXT): ../BoardState.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../BoardState.cpp
+
+../SnakeFood$(OBJEXT): ../SnakeFood.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeFood.cpp
+
+../SnakeHead$(OBJEXT): ../SnakeHead.cpp
+	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeHead.cpp
 
 clean:
 	-$(RM) $(OBJS)
