@@ -29,3 +29,8 @@ void Snake::updatePos(int head_x, int head_y) {
 void Snake::draw(void) {
 	mvaddch(head.getYPos(), head.getXPos(), SNAKECHAR);
 }
+
+// Update the head of the snake given a head
+void Snake::newHead(SnakeHead& newSnakeHead) {
+	head = newSnakeHead;
+}

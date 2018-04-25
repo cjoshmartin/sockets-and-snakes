@@ -34,7 +34,7 @@ SnakeBoard::SnakeBoard() {
 		mvaddch(i, SCREEN_WIDTH-1, BORDER_SIDE);
 	}
 
-	// Initial refresh
+	// Initial refresh with borders
 	refresh();
 }
 
@@ -44,8 +44,11 @@ SnakeBoard::~SnakeBoard() {
 }
 
 // Update the local board given a BoardState (from the server)
-BoardState SnakeBoard::update(BoardState& newstate) {
+BoardState SnakeBoard::update(BoardState& newState) {
 	// Update player 1 and 2's snake heads
+	player1.newHead(newState.player_1);
+	player2.newHead(newState.player_2);
+
 	// Eat food
 	// Return updated state
 }
@@ -54,4 +57,5 @@ BoardState SnakeBoard::update(BoardState& newstate) {
 void SnakeBoard::draw(void) {
 	player1.draw();
 	player2.draw();
+	refresh();
 }

@@ -24,6 +24,7 @@ class Snake {
 		bool isAlive(void);
 		void updatePos(int head_x, int head_y);
 		void draw(void);
+		void newHead(SnakeHead& newHead);
 		//grow(void);
 };
 
