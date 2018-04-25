@@ -1,16 +1,13 @@
 /* timeclnt.c - a client for timeserv.c
  *              usage: timeclnt hostname portnumber
  */
-#include <iostream>
 #include       <stdio.h>
-#include  	   <string.h>
 #include       <sys/types.h>
 #include       <sys/socket.h>
 #include       <netinet/in.h>
 #include       <netdb.h>
-#include 	   <unistd.h>
-#include <time.h>
-#include "../../include/BoardState.h"
+
+#include	"structs.h"
 
 #define        oops(msg)       { perror(msg); exit(1); }
 main(int ac, char *av[])
@@ -18,18 +15,20 @@ main(int ac, char *av[])
 	struct sockaddr_in  servadd;        /* the number to call */
 	struct hostent      *hp;            /* used to get number */
 	int    sock_id, sock_fd;            /* the socket and fd  */
-	void *  message;             /* to receive message */
+	char   message[BUFSIZ];             /* to receive message */
+	unsigned char buffer[BUFSIZ];
 	int    messlen;                     /* for message length */
-
+	
 	int i;
 	char clientid[4];
-
-	BoardState * state;
-
+	
+	// snake variables
+	position trophy;
+	
 	//make some random ID for this client
 	srand (time(NULL));
 	sprintf(clientid,"%d", rand()%1000);
-	std::cout << clientid << "\n";
+	
      /*
       * Step 1: Get a socket
       */
@@ -61,16 +60,33 @@ main(int ac, char *av[])
       * Step 3: transfer data from server, then hangup
       */
 
-	messlen = read(sock_id, (char *)message, BUFSIZ);     /* read stuff   */
+	messlen = read(sock_id, message, BUFSIZ);     /* read stuff   */
 	if ( messlen == - 1 )
-	       oops("TACOS ARE COOL, read") ; // TODO: breaking here
+	       oops("read") ;
 	if ( write( 1, message, messlen ) != messlen )  /* and write to */
 	       oops( "write" );                        /* stdout       */
 
-	while(true) {
-   // TODO: POLLING HERE for change in postion
-		if ( write( sock_id, message, sizeof(BoardState) ) != messlen )  /* and write to */
+	// printf("client %s writing to the server\n",clientid);
+	// sprintf(message, "Greetings from client %s (%i)", clientid, i);
+	// gets(message);
+	// strcat(message, clientid);
+	// messlen = strlen(message);		
+	// if ( write( sock_id, message, messlen ) != messlen )  /* and write to */
+	// 	oops( "write" );	
+		
+	for( i = 0; i < 5; i ++) {
+		// send the dummy data to server
+		if ( write( sock_id, ".", 1 ) != 1 )  /* and write to */
 			oops( "write" );
+		
+		messlen = read(sock_id, buffer, BUFSIZ); 
+		if ( messlen == - 1 )
+	       oops("read") ;
+	   memcpy(&trophy, buffer, messlen);
+	   printf("Clinet %s: Trophy position obtained from the server: (%2d,%2d)\n", clientid, trophy.x, trophy.y);
+		
+		
+		
 		//usleep(333*1000);
 		sleep(1);
 	}

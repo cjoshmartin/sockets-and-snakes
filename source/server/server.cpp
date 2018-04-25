@@ -35,25 +35,6 @@ int main(int argc , char *argv[])
 
     // ** IMPORTANT ** for simplicity, ignore SIGPIPE
     signal(SIGPIPE, SIG_IGN);
-    // When you call send() on an already closed connection, the
-    // operating system may issue SIGPIPE to your process. Usually
-    // the default handler for SIGPIPE is to kill your process.
-    // In order to prevent this from occurring, you can either ignore
-    //	the signal (e.g., with signal(SIGPIPE, SIG_IGN) or
-    //	sigignore(SIGPIPE)), or you can pass the MSG_NOSIGNAL option to send():
-    /*
-       int send_result = send(newfd, ok, 3, MSG_NOSIGNAL);
-       if (send_result >= 0) {
-    // okay, but check if all your data got sent! 
-    if (send_result < 3){} // ...do something
-    } else {
-    switch (errno) {
-    // some other cases
-    case EPIPE:
-    // sending on a closed connection...
-    }
-    }
-    */
 
     //initialise all client_socket[] to 0 so not checked 
     for (i = 0; i < max_clients; i++)  
@@ -103,6 +84,7 @@ int main(int argc , char *argv[])
 
 
     BoardState  startState;
+    startState.test_string = "test is a test";
     
 
     //set of socket descriptors 
