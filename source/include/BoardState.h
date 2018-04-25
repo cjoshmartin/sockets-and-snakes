@@ -22,7 +22,7 @@ class BoardState {
 		SnakeHead player_1;
 		SnakeHead player_2;
 		SnakeFood snake_food;
-		std::string test_string;
+		char test_string[1024];
 		BoardState();
 		~BoardState();
 

@@ -61,17 +61,26 @@ int main(int ac, char *av[])
      * Step 3: transfer data from server, then hangup
      */
 
-        char buffer[1025];
+	char buffer[1025];
+
+	// get message from server and check result
 	messlen = read(sock_id, buffer, sizeof(BoardState));     /* read stuff   */
 	if ( messlen == - 1 )
-	oops("read") ;
-        memcpy(&incoming_state,buffer,messlen);
+		oops("read") ;
+
+	// Copy buffered message into object
+	memcpy(&incoming_state, buffer, messlen);
 	std::cout << incoming_state.test_string << "\n";
-        incoming_state.test_string = "hello from the client";
-        
-        memcpy(buffer, &incoming_state,messlen);
-        if ( send( sock_id,buffer , messlen,0) != messlen )  /* and write to */
-            oops( "write" );                        /* stdout       */
+	strncpy(incoming_state.test_string, "hello from the client", 1024);
+	printf("Boardstate size: %d\nMesslen == %d\n", sizeof(BoardState), messlen);
+	printf("%s\n", incoming_state.test_string);
+	
+	// Copy modified state into buffer
+	memcpy(buffer, &incoming_state,messlen);
+
+	// Send modified state to server and error-check
+	if ( send( sock_id, buffer, messlen,0) != messlen )  /* and write to */
+		oops( "write" );                        /* stdout       */
 
 //	incoming_state.test_string = "Welcome from the client";
 //	if ( write( sock_id, (void *)&incoming_state, messlen ) != messlen )  /* and write to */
