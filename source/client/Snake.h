@@ -9,13 +9,15 @@
 class Snake {
 	private:
 		bool alive;
-		SnakeHead head;
 		bool growflag;
+		SnakeHead head;
+		//SnakeTail tail;
 
 	public:
 		Snake();
 		~Snake();
 
+		void initPos(int xposk, int ypos);
 		bool isAlive(void);
 		updatePos(int head_x, int head_y);
 		//grow(void);

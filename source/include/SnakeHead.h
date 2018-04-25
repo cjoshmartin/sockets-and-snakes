@@ -6,6 +6,14 @@
 #ifndef _SNAKEHEAD_H
 #define _SNAKEHEAD_H
 
+#define X_SIZE 80
+#define Y_SIZE 24
+
+#define PLAYER_1_X 15
+#define PLAYER_1_Y 7
+#define PLAYER_2_X 64
+#define PLAYER_2_Y 7
+
 enum Direction{
 	Up,
 	Right,
@@ -23,11 +31,12 @@ class SnakeHead {
 		SnakeHead();
 		~SnakeHead();
 
-		void updatePos();
+		void setPos(int xpos, int ypos);
 		void setDir(int newdir);
 		int getXPos();
 		int getYPos();
 		void addLength(void);
+		bool updatePos();
 		int getLength(void);
 };
 

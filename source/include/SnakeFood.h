@@ -21,7 +21,7 @@ class SnakeFood {
 
 		int getXPos();
 		int getYPos();
-		randPos();
+		void randPos(void);
 };
 
 #endif
