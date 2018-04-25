@@ -2,7 +2,8 @@
  * Queue data structure to keep track of the snake tail/history
  */
 
-#include "SnakeState.h"
+#include "SnakeHead.h"
+#include "TailSeg.h"
 
 #define QUEUE_LEN 3600
 
@@ -20,3 +21,4 @@ class SnakeQueue {
 		void enqueue(TailSeg& segment);
 		TailSeg dequeue(void);
 };
+
