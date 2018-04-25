@@ -13,7 +13,7 @@ COMPILE.c     = $(CC) $(CFLAGS) $(CPPFLAGS) -c
 COMPILE.cc    = $(CXX) $(CCFLAGS) $(CPPFLAGS) -c
 LDFLAGS       = -L"."
 CCC           = $(CXX)
-MAKEFILE      = Makefile.client
+MAKEFILE      = Makefile.straight_client
 DEPENDENCIES  = .depend.$(MAKEFILE)
 BTARGETDIR    = ./
 BIN           = $(BTARGETDIR)client$(EXESUFFIX)$(EXEEXT)
@@ -31,8 +31,8 @@ LIBPREFIX     = lib
 LIBSUFFIX     = 
 GENFLAGS      = -O
 LDLIBS        = -ldl $(subst lib,-l,$(sort $(basename $(notdir $(wildcard /usr/lib/librt.so /lib/librt.so))))) -lpthread
-OBJS          = main$(OBJEXT) set_ticker$(OBJEXT) Snake$(OBJEXT) SnakeBoard$(OBJEXT) TailSeg$(OBJEXT) timeclnt$(OBJEXT) ../BoardState$(OBJEXT) ../SnakeFood$(OBJEXT) ../SnakeHead$(OBJEXT)
-SRC           = main.cpp set_ticker.cpp Snake.cpp SnakeBoard.cpp TailSeg.cpp timeclnt.cpp ../BoardState.cpp ../SnakeFood.cpp ../SnakeHead.cpp
+OBJS          = client$(OBJEXT) ../../BoardState$(OBJEXT) ../../SnakeFood$(OBJEXT) ../../SnakeHead$(OBJEXT)
+SRC           = client.cpp ../../BoardState.cpp ../../SnakeFood.cpp ../../SnakeHead.cpp
 LINK.cc       = $(LD) $(LDFLAGS)
 EXPORTFLAGS   = 
 DEPLIBS       = $(foreach lib, , $(foreach libpath, ., $(wildcard $(libpath)/lib$(lib).a)))
@@ -45,37 +45,22 @@ all: $(BIN)
 
 $(BIN): $(OBJS) $(DEPLIBS)
 	@$(TESTDIRSTART) "$(BTARGETDIR)" $(TESTDIREND) $(MKDIR) "$(BTARGETDIR)"
-	$(LINK.cc) $(OBJS) $(LDLIBS) $(OUTPUT_OPTION) -lcurses
+	$(LINK.cc) $(OBJS) $(LDLIBS) $(OUTPUT_OPTION)
 
 generated: $(GENERATED_DIRTY)
 	@-:
 
-main$(OBJEXT): main.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) main.cpp
+client$(OBJEXT): client.cpp
+	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) client.cpp
 
-set_ticker$(OBJEXT): set_ticker.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) set_ticker.cpp
+../../BoardState$(OBJEXT): ../../BoardState.cpp
+	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) ../../BoardState.cpp
 
-Snake$(OBJEXT): Snake.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) Snake.cpp
+../../SnakeFood$(OBJEXT): ../../SnakeFood.cpp
+	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) ../../SnakeFood.cpp
 
-SnakeBoard$(OBJEXT): SnakeBoard.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) SnakeBoard.cpp
-
-TailSeg$(OBJEXT): TailSeg.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) TailSeg.cpp
-
-timeclnt$(OBJEXT): timeclnt.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
-
-../BoardState$(OBJEXT): ../BoardState.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../BoardState.cpp
-
-../SnakeFood$(OBJEXT): ../SnakeFood.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeFood.cpp
-
-../SnakeHead$(OBJEXT): ../SnakeHead.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeHead.cpp
+../../SnakeHead$(OBJEXT): ../../SnakeHead.cpp
+	$(COMPILE.cc) $(EXPORTFLAGS) $(OUTPUT_OPTION) ../../SnakeHead.cpp
 
 clean:
 	-$(RM) $(OBJS)
