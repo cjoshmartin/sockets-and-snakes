@@ -20,6 +20,8 @@ class Snake {
 		TailSeg tail[X_SIZE*Y_SIZE];
 
 	public:
+		int num;
+
 		Snake();
 		~Snake();
 

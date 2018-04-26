@@ -18,7 +18,7 @@
 
 #define TRUE   true
 #define FALSE  false
-#define PORT 9888// 1025 - 32000
+#define PORT 5432// 1025 - 32000
 
 
 int main(int argc , char *argv[])  
@@ -91,6 +91,7 @@ int main(int argc , char *argv[])
 
 	// While the game is being played
     while (playing) {
+		playing = looper(master_socket, max_clients, client_socket, address, addrlen, currentState, playernum);
 		playing = looper(master_socket, max_clients, client_socket, address, addrlen, currentState, playernum);
 		printf("Sent/received with clients\n");
 		if (playernum > 2)

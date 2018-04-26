@@ -33,7 +33,8 @@ void Snake::draw(void) {
 	}
 
 	// Draw new head
-	mvaddch(head.getYPos(), head.getXPos(), 'T');
+	char ch = num + '0';
+	mvaddch(head.getYPos(), head.getXPos(), ch);
 
 	// Undraw the last position of the tail and update the queue pointers
 	if (head.getLength() != 0) {

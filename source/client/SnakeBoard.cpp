@@ -9,6 +9,8 @@
 // Initialize curses environment, draw border, initialize player positions based
 //  on initial values
 SnakeBoard::SnakeBoard() : currentPlayer(1) {
+	player1.num = 1;
+	player2.num = 2;
 
 }
 
