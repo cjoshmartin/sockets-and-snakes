@@ -14,6 +14,8 @@
 #include <string.h>
 #include <sys/time.h>
 
+#include "../include/port.h"
+
 void UpdateBoard(BoardState& theBoard);
 void e_pipe(int signum);
 void sig_pipe(int signum);
@@ -33,16 +35,16 @@ int main(int ac, char* av[]) {
 	char* hostname;
 	int portnum;
 
-	
+
 	// Check command-line arguments
-	if (ac < 3) {
-		printf("Usage: %s [hostname] [portnum]\n", av[0]);
+	if (ac < 2) {
+		printf("Usage: %s [hostname] \n", av[0]);
 		exit(1);
 	}
 
 	// Get hostname and port number from command line arguments
 	portnum = atoi(av[2]);
-	hostname = av[1];
+	hostname = PORT;
 
 	// Install ^C handler
 	signal(SIGINT, killHandle);
@@ -76,7 +78,7 @@ int main(int ac, char* av[]) {
 
 		// Send new state to the server
 		//gameBoard.sendState(); // Send from client side
-		
+
 		// Enforce minimum elapsed time of 80 ms by waiting for that time
 		double diff;
 		do {
@@ -89,7 +91,8 @@ int main(int ac, char* av[]) {
 	printf("Game ended nicely\n");
 }
 
-void sig_pipe(int signum) {
+void sig_pipe(int signum) { // when the socket gets disconnected,
+													//  this will send out a SIGPIPE 
 	endwin();
 	printf("SIGPIPE\n");
 	exit(1);
