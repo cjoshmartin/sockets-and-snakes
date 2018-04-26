@@ -42,13 +42,6 @@ void BoardState::update() {
 		return;
 	}
 
-	// Check for head collision
-	if (player_1.getXPos() == player_2.getXPos() && player_1.getYPos() == player_2.getYPos()) {
-		game_on = false;
-		winner = DRAW;
-		return;
-	}
-
 	// Check if a snake ate the food and regenerate if necessary
 	if (player_1.getXPos() == snake_food.getXPos() && player_1.getYPos() == snake_food.getYPos()) {
 		// Add 1 to player 1's score
