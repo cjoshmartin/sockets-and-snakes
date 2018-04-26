@@ -9,8 +9,8 @@
 
 // Default constructor
 BoardState::BoardState() : game_on(true), player1_alive(true), player2_alive(true), winner(-1) {
-	player_1.setPos(PLAYER_1_X, PLAYER_1_Y);
-	player_2.setPos(PLAYER_2_X, PLAYER_2_Y);
+	player_1.setPos(15, 20);
+	player_2.setPos(64, 20);
 	snake_food.randPos();
 }
 
@@ -23,18 +23,23 @@ BoardState::~BoardState() {
 void BoardState::update() {
 	// Update snake head position and end game if collision with walls occurs
 	if (!player_1.updatePos()) {
+		printf("Game over\n");
 		game_on = false;
 		winner = 2;
+		return;
 	}
 	if (!player_2.updatePos()) {
+		printf("Game over\n");
 		game_on = false;
 		winner = 1;
+		return;
 	}
 
 	// Check for head collision
 	if (player_1.getXPos() == player_2.getXPos() && player_1.getYPos() == player_2.getYPos()) {
 		game_on = false;
 		winner = DRAW;
+		return;
 	}
 
 	// Check if a snake ate the food and regenerate if necessary

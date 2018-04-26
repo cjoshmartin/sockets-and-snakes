@@ -51,31 +51,31 @@ generated: $(GENERATED_DIRTY)
 	@-:
 
 main$(OBJEXT): main.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) main.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) main.cpp
 
 Snake$(OBJEXT): Snake.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) Snake.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) Snake.cpp
 
 SnakeBoard$(OBJEXT): SnakeBoard.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) SnakeBoard.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) SnakeBoard.cpp
 
 TailSeg$(OBJEXT): TailSeg.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) TailSeg.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) TailSeg.cpp
 
 timeclnt$(OBJEXT): timeclnt.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) timeclnt.cpp
 
 Utils$(OBJEXT): Utils.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) Utils.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) Utils.cpp
 
 ../BoardState$(OBJEXT): ../BoardState.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../BoardState.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) ../BoardState.cpp
 
 ../SnakeFood$(OBJEXT): ../SnakeFood.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeFood.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeFood.cpp
 
 ../SnakeHead$(OBJEXT): ../SnakeHead.cpp
-	$(COMPILE.cc) -g -lcurses $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeHead.cpp
+	$(COMPILE.cc) -g -lcurses -lthread $(EXPORTFLAGS) $(OUTPUT_OPTION) ../SnakeHead.cpp
 
 clean:
 	-$(RM) $(OBJS)

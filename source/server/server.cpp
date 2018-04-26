@@ -92,7 +92,10 @@ int main(int argc , char *argv[])
 	// While the game is being played
     while (playing) {
 		playing = looper(master_socket, max_clients, client_socket, address, addrlen, currentState, playernum);
-		currentState.update();
+		printf("Sent/received with clients\n");
+		if (playernum > 2)
+			currentState.update();
+		printf("Player 1 coords: (%d, %d)\nPlayer 2 coords (%d, %d)\n", currentState.player_1.getXPos(), currentState.player_1.getYPos(), currentState.player_2.getXPos(), currentState.player_2.getYPos());
     }
 
     return 0;  

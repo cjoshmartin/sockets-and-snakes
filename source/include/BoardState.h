@@ -17,7 +17,6 @@
 class BoardState {
 	public:
 		int winner;
-		int player_num;
 		bool game_on; 	// Flag to determine if the game is still going on
 		bool player1_alive, player2_alive;
 		SnakeHead player_1;

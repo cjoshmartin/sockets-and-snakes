@@ -126,7 +126,7 @@ void SnakeBoard::getState(void) {
 	BoardState tempState;
 
 	// Request new state
-	if (send(sock_id, &request, sizeof(request), 0) != sizeof(request)) {
+	if (send(sock_id, &request, sizeof(request), 0) == -1) {
 		quit();
 		perror("request");
 		exit(1);
@@ -147,7 +147,7 @@ void SnakeBoard::getState(void) {
 // Send updated state to the server
 void SnakeBoard::sendState(void) {
 	// Send the current state to the server
-	if (send(sock_id, &internalState, sizeof(BoardState), 0) != sizeof(BoardState)) {
+	if (send(sock_id, &internalState, sizeof(BoardState), 0) == -1) {
 		quit();
 		perror("reply");
 		exit(1);
@@ -169,9 +169,12 @@ bool SnakeBoard::update() {
 	// Else, win has occurred by one player and game is over
 	} else {
 		// Print win message depending on player
+		endwin();
 		if (internalState.winner == currentPlayer) {
+			printf("I won!\n");
 			won = true;
 		} else {
+			printf("I lost\n");
 			won = false;
 		}
 

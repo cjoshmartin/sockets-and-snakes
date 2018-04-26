@@ -3,7 +3,7 @@ project (client) {
   install = .
  
   Source_Files {
-    buildflags = -g -lcurses
+    buildflags = -g -lcurses -lthread
     *.cpp
 	../*.cpp
   }

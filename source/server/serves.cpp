@@ -123,6 +123,7 @@ bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 				}
 
 				// Receive updated state from client
+				printf("Reading reply from client\n");
 				valread = read(sd, &tempState, sizeof(BoardState));
 
 				// If return value is zero, client disconnected.

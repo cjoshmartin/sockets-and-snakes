@@ -15,6 +15,8 @@
 #include <sys/time.h>
 
 void UpdateBoard(BoardState& theBoard);
+void e_pipe(int signum);
+void sig_pipe(int signum);
 
 int main(int ac, char* av[]) {
 	// Time-storing variables to enforce minimum refresh time
@@ -42,11 +44,13 @@ int main(int ac, char* av[]) {
 	portnum = atoi(av[2]);
 	hostname = av[1];
 
-	// Initialize the connection with the server and set the player number
-	gameBoard.initConnection(hostname, portnum);
-
 	// Install ^C handler
 	signal(SIGINT, killHandle);
+	signal(SIGPIPE, sig_pipe);
+	signal(EPIPE, e_pipe);
+
+	// Initialize the connection with the server and set the player number
+	gameBoard.initConnection(hostname, portnum);
 
 	// Initialize Curses
 	gameBoard.initScreen();
@@ -76,15 +80,21 @@ int main(int ac, char* av[]) {
 		double diff;
 		do {
 			gettimeofday(&end, NULL);
-		} while (timedif(start, end) < 80000);
+		} while (timedif(start, end) < 1000000);
 	}
 
 	// Print winner/loser and wait for keypress
+	endwin();
 	printf("Game ended nicely\n");
 }
 
-// Gets a new board state by socket communiation
-void UpdateBoard(BoardState& theBoard) {
-	theBoard.update();
+void sig_pipe(int signum) {
+	endwin();
+	printf("SIGPIPE\n");
+	exit(1);
 }
-
+void e_pipe(int signum) {
+	endwin();
+	printf("EPIPE\n");
+	exit(1);
+}
