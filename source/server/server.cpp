@@ -82,19 +82,21 @@ int main(int argc , char *argv[])
     addrlen = sizeof(address);  
     puts("Waiting for connections ...");  
 
+	// 
+    // Send to clients until game over or one disconnects
+	//
+	BoardState currentState;
+	bool playing = true;
+	int playernum = 1;
 
-    BoardState  startState;
-    strncpy(startState.test_string, "test is a test", 1024);
-    int playernum =1;
-
-    //set of socket descriptors 
-    while(TRUE)  
-    {
-        looper(master_socket, max_clients, client_socket, address, addrlen, (void *) (&startState), playernum);
-    } // end of while(TRUE) 
+	// While the game is being played
+    while (playing) {
+		playing = looper(master_socket, max_clients, client_socket, address, addrlen, currentState, playernum);
+		currentState.update();
+    }
 
     return 0;  
-} // end of main
+}
 
 
 

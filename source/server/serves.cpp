@@ -13,8 +13,7 @@
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState,
-            int &pInt)
+bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, BoardState& currentState, int &pInt)
 {
     fd_set readfds;
 
@@ -60,81 +59,101 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
         printf("select error");  
     }  
 
-    //If something happened on the master socket , 
-    //then its an incoming connection 
-    if (FD_ISSET(master_socket, &readfds))  
-    {  
-        if ((new_socket = accept(master_socket, 
-                        (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)  
-        {  
+    // If the activity is on the master socket, then it is a new connection.
+	// Accept only if the number of players is less than 2
+    if (FD_ISSET(master_socket, &readfds) && pInt < 2) {  
+        if ((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {  
             perror("accept");  
             exit(EXIT_FAILURE);  
         }  
 
         //inform user of socket number - used in send and receive commands 
-        printf("New connection , socket fd is %d , ip is : %s , port : %d\n" ,
-                new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
+        printf("New connection , socket fd is %d , ip is : %s , port : %d\n", new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
-        //send new connection greeting message
-        memcpy(buffer,&pInt, sizeof(int *));
-        if( send(new_socket, buffer, sizeof(int ), 0) != sizeof(int))
-        {
-            perror("send");  
+        // Send player their player number (1 or 2)
+        memcpy(buffer, &pInt, sizeof(int));
+        if( send(new_socket, buffer, sizeof(int ), 0) != sizeof(int)) {
+			perror("send");  
         }
 
          // increasements player number
         std::cout << "Player "<< pInt++ << " has joined.\n";
 
         //add new socket to array of sockets 
-        for (i = 0; i < max_clients; i++)  
-        {  
+        for (i = 0; i < max_clients; i++) {  
             //if position is empty 
-            if( client_socket[i] == 0 )
-            {
+            if( client_socket[i] == 0 ) {
                 client_socket[i] = new_socket;
                 break;
-            }  
+            }
         }
     }
 
     //else its some IO operation on some other socket
+	bool playFlag = true;
+	BoardState tempState;
     for (i = 0; i < max_clients; i++)
     {
         sd = client_socket[i];
 
         if (FD_ISSET( sd , &readfds))
         {
-            //Check if it was for closing , and also read the
-            //incoming message
-            if ((valread = read( sd, buffer, sizeof(BoardState))) == 0)
+            // Check for a request or disconnect from the client
+            if ( (valread = read(sd, buffer, sizeof(BoardState))) == 0 )
             {
                 //Somebody disconnected , get his details and print
-                getpeername(sd , (struct sockaddr*)&address , \
-                        (socklen_t*)&addrlen);
-                printf("Client disconnected , ip %s , port %d \n" ,
-                        inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
+                getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
+                printf("Client disconnected, ip %s, port %d\n", inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
                 //Close the socket and mark as 0 in list for reuse
                 close( sd );
                 client_socket[i] = 0;
+
+				// Do not continue playing
+				playFlag = false;
             }
-
-
-            //Echo back the message that came in
+            // Send the client the updated board state and receive their new
             else
             {
-				BoardState state;
-				state.game_on = false;
-				printf("Sending to client\n");
-				if (send(sd, &state, sizeof(BoardState), 0) != sizeof(BoardState)) {
+				printf("Sending state to client\n");
+				if (send(sd, &currentState, sizeof(BoardState), 0) != sizeof(BoardState)) {
 					perror("BoardState send");
 					exit(1);
 				}
-				printf("bye bye\n");
+
+				// Receive updated state from client
+				valread = read(sd, &tempState, sizeof(BoardState));
+
+				// If return value is zero, client disconnected.
+				if (valread == 0) {
+					//Somebody disconnected , get his details and print
+					getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
+					printf("Client disconnected, ip %s, port %d\n", inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+
+					//Close the socket and mark as 0 in list for reuse
+					close( sd );
+					client_socket[i] = 0;
+
+					// Do not continue playing
+					playFlag = false;
+
+					// Set game over
+					currentState.game_on = false;
+					currentState.winner = DRAW;
+				} else {
+					// Update state from client
+					currentState = tempState;
+
+					// Check if the player won
+					if (!currentState.game_on) {
+
+				}
             }// end of else statement
 
         }// end of outer if statement
     } // end of for loop, looping over max_clients
+
+	return playFlag;
 
 } //end of looper
 
