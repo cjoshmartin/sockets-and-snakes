@@ -32,7 +32,8 @@ void Snake::draw(void) {
 	}
 
 	// Draw new head
-	mvaddch(head.getYPos(), head.getXPos(), 'T');
+	char ch = num + '0';
+	mvaddch(head.getYPos(), head.getXPos(), ch);
 
 	// Update last position
 	last_x = head.getXPos();

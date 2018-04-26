@@ -47,7 +47,7 @@ int main(int ac, char* av[]) {
 	// Install ^C handler
 	signal(SIGINT, killHandle);
 	signal(SIGPIPE, sig_pipe);
-	signal(EPIPE, e_pipe);
+	//signal(EPIPE, e_pipe);
 
 	// Initialize the connection with the server and set the player number
 	gameBoard.initConnection(hostname, portnum);
@@ -80,7 +80,7 @@ int main(int ac, char* av[]) {
 		double diff;
 		do {
 			gettimeofday(&end, NULL);
-		} while (timedif(start, end) < 500000);
+		} while (timedif(start, end) < 100000);
 	}
 
 	// Print winner/loser and wait for keypress
@@ -91,10 +91,5 @@ int main(int ac, char* av[]) {
 void sig_pipe(int signum) {
 	endwin();
 	printf("SIGPIPE\n");
-	exit(1);
-}
-void e_pipe(int signum) {
-	endwin();
-	printf("EPIPE\n");
 	exit(1);
 }

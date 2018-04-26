@@ -19,6 +19,8 @@ class Snake {
 		//SnakeTail tail;
 
 	public:
+		int num;
+
 		Snake();
 		~Snake();
 
