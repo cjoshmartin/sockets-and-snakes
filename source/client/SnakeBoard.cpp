@@ -8,7 +8,8 @@
 
 // Initialize curses environment, draw border, initialize player positions based
 //  on initial values
-SnakeBoard::SnakeBoard() {
+SnakeBoard::SnakeBoard() : currentPlayer(1) {
+
 }
 
 // Destroy curses board
@@ -20,6 +21,7 @@ SnakeBoard::~SnakeBoard() {
 void SnakeBoard::initScreen(void) {
 	// Initialize curses environment
 	initscr();
+	cbreak();
 	noecho();
 	timeout(1);
 	curs_set(0);
@@ -119,6 +121,11 @@ void SnakeBoard::quit(void) {
 
 // Receive a new BoardState from the server and update internally
 void SnakeBoard::getState(void) {
+	/*
+	BoardState tempState = internalState;
+	tempState.update();
+	internalState = tempState;
+	*/
 	int messlen;
 	int request = 1;
 

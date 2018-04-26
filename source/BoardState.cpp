@@ -8,10 +8,19 @@
 #include <string.h>
 
 // Default constructor
-BoardState::BoardState() : game_on(true), player1_alive(true), player2_alive(true), winner(-1) {
+BoardState::BoardState() : game_on(true), winner(-1) {
 	player_1.setPos(15, 20);
 	player_2.setPos(64, 20);
 	snake_food.randPos();
+}
+
+// Copy constructor
+BoardState::BoardState(const BoardState& lhs) {
+	winner = lhs.winner;
+	game_on = lhs.game_on;
+	player_1 = lhs.player_1;
+	player_2 = lhs.player_2;
+	snake_food = lhs.snake_food;
 }
 
 // Destructor

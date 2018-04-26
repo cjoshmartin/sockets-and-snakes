@@ -18,11 +18,12 @@ class BoardState {
 	public:
 		int winner;
 		bool game_on; 	// Flag to determine if the game is still going on
-		bool player1_alive, player2_alive;
 		SnakeHead player_1;
 		SnakeHead player_2;
 		SnakeFood snake_food;
+
 		BoardState();
+		BoardState(const BoardState& lhs);
 		~BoardState();
 
 		void update();

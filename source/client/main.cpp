@@ -80,7 +80,7 @@ int main(int ac, char* av[]) {
 		double diff;
 		do {
 			gettimeofday(&end, NULL);
-		} while (timedif(start, end) < 1000000);
+		} while (timedif(start, end) < 500000);
 	}
 
 	// Print winner/loser and wait for keypress
