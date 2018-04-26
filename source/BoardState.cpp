@@ -3,6 +3,7 @@
  *  client to synchronize board states in clients.
  */
 
+#include <cstring>
 #include "include/BoardState.h"
 
 // Default constructor
@@ -10,7 +11,7 @@ BoardState::BoardState() : game_on(true), player1_alive(true), player2_alive(tru
 	player_1.setPos(PLAYER_1_X, PLAYER_1_Y);
 	player_2.setPos(PLAYER_2_X, PLAYER_2_Y);
 	snake_food.randPos();
-	test_string = "Welcome Player!";
+	strncpy(test_string, "Welcome Player!", 1024);
 }
 
 // Destructor

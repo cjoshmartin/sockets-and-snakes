@@ -13,7 +13,8 @@
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState)
+void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState,
+            int &pInt)
 {
     fd_set readfds;
 
@@ -77,28 +78,27 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
         //send new connection greeting message
-        memcpy(buffer,&startState, sizeof(BoardState));
-        if( send(new_socket, buffer, sizeof(BoardState), 0) != sizeof(startState))
-        {  
+        memcpy(buffer,&pInt, sizeof(int *));
+        if( send(new_socket, buffer, sizeof(int ), 0) != sizeof(int))
+        {
             perror("send");  
-        }  
+        }
 
-        puts("Welcome message sent successfully");  
+         // increasements player number
+        std::cout << "Player "<< pInt++ << " has joined.\n";
 
         //add new socket to array of sockets 
         for (i = 0; i < max_clients; i++)  
         {  
             //if position is empty 
-            if( client_socket[i] == 0 )   // <--TODO:check if client has never connected before
+            if( client_socket[i] == 0 )
             {
                 client_socket[i] = new_socket;
                 char *message = "HELLO, TEST ECHO\n";
-//                send(client_socket[i], startState,sizeof(BoardState),0);
-
                 break;
             }  
-        }  
-    }  
+        }
+    }
 
     //else its some IO operation on some other socket
     for (i = 0; i < max_clients; i++)
@@ -109,42 +109,30 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
         {
             //Check if it was for closing , and also read the
             //incoming message
-            if ((valread = read( sd ,buffer, sizeof(BoardState))) == 0)
-            {
-                //Somebody disconnected , get his details and print
-                getpeername(sd , (struct sockaddr*)&address , \
-                        (socklen_t*)&addrlen);
-                printf("Client disconnected , ip %s , port %d \n" ,
-                        inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
-
-                //Close the socket and mark as 0 in list for reuse
-                close( sd );
-                client_socket[i] = 0;
-            }
-
-            //Echo back the message that came in
-            else
-            {
-                std::cout << "bam!" << "\n";
-                BoardState test;
-                memcpy(&test, buffer, valread);
-                std::cout << "test string: " << test.test_string<< "\n";
-
-//                    sendToClient((BoardState *)state, valread, sd);
-            }// end of else statement
+//            if ((valread = read( sd ,buffer, sizeof(BoardState))) == 0)
+//            {
+//                //Somebody disconnected , get his details and print
+//                getpeername(sd , (struct sockaddr*)&address , \
+//                        (socklen_t*)&addrlen);
+//                printf("Client disconnected , ip %s , port %d \n" ,
+//                        inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
+//
+//                //Close the socket and mark as 0 in list for reuse
+//                close( sd );
+//                client_socket[i] = 0;
+//            }
+//
+//            //Echo back the message that came in
+//            else
+//            {
+//                BoardState test;
+//                memcpy(&test, buffer, valread);
+//                std::cout << "test string: " << test.test_string<< "\n";
+//
+//            }// end of else statement
         }// end of outer if statement
     } // end of for loop, looping over max_clients
 
 } //end of looper
 
-
-void sendToClient(BoardState state, int valread, int sd)
-{
-//    std::cout << state.test_string << "\n";
-    //set the string terminating NULL byte on the end
-    //of the data read 
-    //printf("Read from the client: %s\n", buffer);
-//    send(sd , (void *)&state , sizeof(BoardState), 0 );  // NOTE: sends data back,
-                                                //one client at a time 
-}
 

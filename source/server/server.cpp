@@ -85,12 +85,12 @@ int main(int argc , char *argv[])
 
     BoardState  startState;
     strncpy(startState.test_string, "test is a test", 1024);
-    
+    int playernum =1;
 
     //set of socket descriptors 
     while(TRUE)  
     {
-        looper(master_socket, max_clients, client_socket, address, addrlen, (void *)(&startState));
+        looper(master_socket, max_clients, client_socket, address, addrlen, (void *) (&startState), playernum);
     } // end of while(TRUE) 
 
     return 0;  
