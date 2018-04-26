@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h> 
-#include <errno.h> 
-#include <sys/select.h> 
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/select.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/socket.h> 
+#include <sys/socket.h>
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
@@ -20,68 +20,68 @@ bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
     int max_sd,
         activity,
         valread,
-        sd,
+        sd, // current socket connected to
         new_socket,
-        i;
+        i; // iterators
 
     char buffer[1025];
 
-    //clear the socket set 
-    FD_ZERO(&readfds);  
+    //clear the socket set
+    FD_ZERO(&readfds);
 
-    //add master socket to set 
-    FD_SET(master_socket, &readfds);  
-    max_sd = master_socket;  
+    //add master socket to set
+    FD_SET(master_socket, &readfds);
+    max_sd = master_socket;
 
-    //add child sockets to set 
-    for ( i = 0 ; i < max_clients ; i++)  
-    {  
-        //socket descriptor 
-        sd = client_socket[i];  
+    //add child sockets to set
+    for ( i = 0 ; i < max_clients ; i++)
+    {
+        //socket descriptor
+        sd = client_socket[i];
 
-        //if valid socket descriptor then add to read list 
-        if(sd > 0)  
-            FD_SET( sd , &readfds);  
+        //if valid socket descriptor then add to read list
+        if(sd > 0)
+            FD_SET( sd , &readfds);
 
-        //highest file descriptor number, need it for the select function 
-        if(sd > max_sd)  
-            max_sd = sd;  
-    }  
+        //highest file descriptor number, need it for the select function
+        if(sd > max_sd)
+            max_sd = sd;
+    }
 
-    //wait for an activity on one of the sockets , timeout is NULL , 
-    //so wait indefinitely 
+    //wait for an activity on one of the sockets , timeout is NULL ,
+    //so wait indefinitely
 	printf("Waiting for connection\n");
-    activity = select( max_sd + 1 , &readfds , NULL , NULL , NULL);  
+    activity = select( max_sd + 1 , &readfds , NULL , NULL , NULL);
 	printf("Got some activity\n");
 
-    if ((activity < 0) && (errno!=EINTR))  
-    {  
-        printf("select error");  
-    }  
+    if ((activity < 0) && (errno!=EINTR))
+    {
+        printf("select error");
+    }
 
     // If the activity is on the master socket, then it is a new connection.
 	// Accept only if the number of players is less than 2
-    if (FD_ISSET(master_socket, &readfds)) {  
-        if ((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {  
-            perror("accept");  
-            exit(EXIT_FAILURE);  
-        }  
+    if (FD_ISSET(master_socket, &readfds)) {
+        if ((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
+            perror("accept");
+            exit(EXIT_FAILURE);
+        }
 
-        //inform user of socket number - used in send and receive commands 
-        printf("New connection , socket fd is %d , ip is : %s , port : %d\n", new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
+        //inform user of socket number - used in send and receive commands
+        printf("New connection , socket fd is %d , ip is : %s , port : %d\n", new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
 
         // Send player their player number (1 or 2)
         memcpy(buffer, &pInt, sizeof(int));
         if( send(new_socket, buffer, sizeof(int ), 0) != sizeof(int)) {
-			perror("send");  
+			perror("send");
         }
 
-         // increasements player number
+         // increasements player number and displays to the server screen
         std::cout << "Player "<< pInt++ << " has joined.\n";
 
-        //add new socket to array of sockets 
-        for (i = 0; i < max_clients; i++) {  
-            //if position is empty 
+        //add new socket to array of sockets
+        for (i = 0; i < max_clients; i++) {
+            //if position is empty
             if( client_socket[i] == 0 ) {
                 client_socket[i] = new_socket;
                 break;
@@ -90,11 +90,11 @@ bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
     }
 
     //else its some IO operation on some other socket
-	bool playFlag = true;
+	bool playFlag = true; // determines if there is a winner or if they should keep playing
 	BoardState tempState;
     for (i = 0; i < max_clients && pInt > 2; i++)
     {
-        sd = client_socket[i];
+        sd = client_socket[i]; // gets a client
 
         if (FD_ISSET( sd , &readfds))
         {
@@ -141,7 +141,6 @@ bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 
 					// Set game over
 					currentState.game_on = false;
-					currentState.winner = DRAW;
 				} else {
 					// Update state from client
 					currentState = tempState;
@@ -186,5 +185,3 @@ bool looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 	return playFlag;
 
 } //end of looper
-
-
