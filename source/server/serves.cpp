@@ -105,6 +105,7 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 
         if (FD_ISSET( sd , &readfds))
         {
+
             //Check if it was for closing , and also read the
             //incoming message
             if ((valread = read( sd ,buffer, sizeof(BoardState))) == 0)
@@ -120,16 +121,20 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 client_socket[i] = 0;
             }
 
+
             //Echo back the message that came in
             else
             {
-                std::cout << "bam!" << "\n";
-                BoardState test;
-                memcpy(&test, buffer, valread);
-                std::cout << "test string: " << test.test_string<< "\n";
-
-//                    sendToClient((BoardState *)state, valread, sd);
+				BoardState state;
+				state.game_on = false;
+				printf("Sending to client\n");
+				if (send(sd, &state, sizeof(BoardState), 0) != sizeof(BoardState)) {
+					perror("BoardState send");
+					exit(1);
+				}
+				printf("bye bye\n");
             }// end of else statement
+
         }// end of outer if statement
     } // end of for loop, looping over max_clients
 

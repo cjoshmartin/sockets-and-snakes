@@ -45,6 +45,10 @@ int main(int ac, char* av[]) {
 	// Initialize the connection with the server and set the player number
 	gameBoard.initConnection(hostname, portnum);
 
+	gameBoard.getState(); // get from client side
+	printf("Success!\n");
+	exit(0);
+
 	// Install ^C handler
 	signal(SIGINT, killHandle);
 

@@ -47,6 +47,7 @@ class SnakeBoard {
 		void collectInput(void);
 		void sendState(void);
 		void draw(void);
+		void quit(void);
 };
 
 #endif

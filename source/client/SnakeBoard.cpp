@@ -52,7 +52,7 @@ void SnakeBoard::initScreen(void) {
 void SnakeBoard::initConnection(char* hostname, int port) {
 	struct sockaddr_in  servadd;        /* the number to call */
 	struct hostent      *hp;            /* used to get number */
-	int    sock_id, sock_fd;            /* the socket and fd  */
+	int    sock_fd;            /* the socket and fd  */
 	int    messlen;                     /* length of received message*/
 
 	int i;
@@ -106,15 +106,45 @@ void SnakeBoard::initConnection(char* hostname, int port) {
 	printf("Current player is %d\n", currentPlayer);
 	if (messlen <= 0) {
 		perror("connection read");
-		exit(1);
+		quit();
 	} else if (messlen != sizeof(int)) {
 		printf("Issues, homei!\n");
 	}
 }
 
+// Quit the game. Happens upon control C?
+void SnakeBoard::quit(void) {
+	close(sock_id);
+	endwin();
+	exit(1);
+}
+
 // Receive a new BoardState from the server and update internally
 void SnakeBoard::getState(void) {
+	int messlen;
+	int request = 1;
+
 	// Receive from server
+	BoardState tempState;
+
+	// Request new state
+	if (send(sock_id, &request, sizeof(request), 0) != sizeof(request)) {
+		perror("request");
+		exit(1);
+	}
+
+	// Read call to receive data
+	printf("Reading from server\n");
+	messlen = read(sock_id, &tempState, sizeof(BoardState));
+	printf("Read from server\n");
+	if (messlen < 0) {
+		perror("state update read");
+		quit();
+	}
+
+	// Update internal state
+	internalState = tempState;
+	if (internalState.game_on) printf("Send failed\n");
 }
 
 // Send updated state to the server
