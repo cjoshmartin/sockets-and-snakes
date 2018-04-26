@@ -14,7 +14,7 @@
 #include <string.h>
 #include <sys/time.h>
 
-#include "../include/port.h"
+#include "../include/Port.h"
 
 void UpdateBoard(BoardState& theBoard);
 void e_pipe(int signum);
@@ -43,8 +43,8 @@ int main(int ac, char* av[]) {
 	}
 
 	// Get hostname and port number from command line arguments
-	portnum = atoi(av[2]);
-	hostname = PORT;
+	portnum = PORT;
+	hostname = av[1];
 
 	// Install ^C handler
 	signal(SIGINT, killHandle);

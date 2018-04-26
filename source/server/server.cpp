@@ -15,7 +15,7 @@
 
 #include "server.h"
 #include "../include/BoardState.h"
-#include "../include/port.h"
+#include "../include/Port.h"
 
 
 int main(int argc , char *argv[])
