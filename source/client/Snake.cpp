@@ -6,7 +6,7 @@
 #include "Snake.h"
 
 // Default constructor
-Snake::Snake() : alive(true), growflag(false), last_x(-1), last_y(-1) {
+Snake::Snake() : alive(true), growflag(false), last_x(-1), last_y(-1), tail_head(0), tail_tail(0) {
 
 }
 
@@ -25,14 +25,26 @@ void Snake::draw(void) {
 	// Replace old head position with tail char.
 	if (last_x != -1 && last_y != -1) {
 		//mvaddch(last_y, last_x, TAILCHAR);
-		if (head.getLength() == 0)
+		if (head.getLength() == 0) {
 			mvaddch(last_y, last_x, ' ');
-		else
+		} else {
 			mvaddch(last_y, last_x, TAILCHAR);
+		}
 	}
 
 	// Draw new head
 	mvaddch(head.getYPos(), head.getXPos(), 'T');
+
+	// Undraw the last position of the tail and update the queue pointers
+	if (head.getLength() != 0) {
+		// Update tail_head for written position
+		tail[++tail_head].x_pos = last_x;
+		tail[tail_head].y_pos = last_y;
+
+		// Undraw tail_tail
+		mvaddstr(tail[tail_tail].y_pos, tail[tail_tail].x_pos, ' ');
+		tail_tail++;
+	}
 
 	// Update last position
 	last_x = head.getXPos();
@@ -41,5 +53,9 @@ void Snake::draw(void) {
 
 // Update the head of the snake given a head
 void Snake::newHead(SnakeHead& newSnakeHead) {
+	if (newSnakeHead.getLength() > head.getLength()) {
+		tail[++tail_head].x_pos = last_x;
+		tail[tail_head].y_pos = last_y;
+	}
 	head = newSnakeHead;
 }

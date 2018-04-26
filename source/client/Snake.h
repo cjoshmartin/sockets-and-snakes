@@ -16,7 +16,8 @@ class Snake {
 		bool growflag;
 		SnakeHead head;
 		int last_x, last_y;
-		//SnakeTail tail;
+		int tail_head, tail_tail;
+		TailSeg tail[X_SIZE*Y_SIZE];
 
 	public:
 		Snake();

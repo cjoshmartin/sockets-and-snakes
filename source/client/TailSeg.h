@@ -8,15 +8,11 @@
 #define TAILCHAR 'O'
 
 class TailSeg {
-	private:
-		int x_pos, y_pos;
-
 	public:
+		int x_pos, y_pos;
 		TailSeg();
 		~TailSeg();
 		TailSeg(int xpos, int ypos);
-		int getXPos();
-		int getYPos();
 };
 
 #endif
