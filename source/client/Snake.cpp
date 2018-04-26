@@ -43,7 +43,8 @@ void Snake::draw(void) {
 		tail[tail_head].y_pos = last_y;
 
 		// Undraw tail_tail
-		mvaddstr(tail[tail_tail].y_pos, tail[tail_tail].x_pos, ' ');
+		ch = ' ';
+		mvaddch(tail[tail_tail].y_pos, tail[tail_tail].x_pos, ch);
 		tail_tail++;
 	}
 
@@ -57,6 +58,7 @@ void Snake::newHead(SnakeHead& newSnakeHead) {
 	if (newSnakeHead.getLength() > head.getLength()) {
 		tail[++tail_head].x_pos = last_x;
 		tail[tail_head].y_pos = last_y;
+		mvaddch(last_y, last_x, 'O');
 	}
 	head = newSnakeHead;
 }

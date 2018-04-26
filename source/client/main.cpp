@@ -50,7 +50,7 @@ int main(int ac, char* av[]) {
 	//signal(EPIPE, e_pipe);
 
 	// Initialize the connection with the server and set the player number
-	gameBoard.initConnection(hostname, portnum);
+	//gameBoard.initConnection(hostname, portnum);
 
 	// Initialize Curses
 	gameBoard.initScreen();
@@ -66,6 +66,7 @@ int main(int ac, char* av[]) {
 
 		// Update the graphical board from the state
 		playing = gameBoard.update();
+		playing = true;
 
 		// Draw the board on the screen
 		gameBoard.draw();
@@ -74,7 +75,7 @@ int main(int ac, char* av[]) {
 		gameBoard.collectInput();
 
 		// Send new state to the server
-		gameBoard.sendState(); // Send from client side
+		//gameBoard.sendState(); // Send from client side
 		
 		// Enforce minimum elapsed time of 80 ms by waiting for that time
 		double diff;

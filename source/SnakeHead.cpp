@@ -24,7 +24,7 @@ SnakeHead::~SnakeHead() {
 }
 
 // Parameterized constructor
-SnakeHead::SnakeHead(int xpos, int ypos) : x_pos(xpos), y_pos(ypos), dir(Up), length(0) {
+SnakeHead::SnakeHead(int xpos, int ypos) : x_pos(xpos), y_pos(ypos), dir(-1), length(0) {
 
 }
 
@@ -65,28 +65,27 @@ bool SnakeHead::updatePos() {
 		case Right:
 			x_pos += 1;
 			break;
+		default:
+			// Do nothing
+			break;
 	}
 
 	// Check x coordinates for collision with walls
 	if (x_pos <= 0) {
 		x_pos = 0;
 		noCollision = false;
-		printf("x zero bound\n");
 	} else if (x_pos >= X_SIZE-1) {
 		x_pos = X_SIZE-1;
 		noCollision = false;
-		printf("x max bound\n");
 	}
 
 	// Check y coordinates for collision
 	if (y_pos <= 0) {
 		y_pos = 0;
 		noCollision = false;
-		printf("y zero bound\n");
 	} else if (y_pos >= Y_SIZE-1) {
 		y_pos = Y_SIZE-1;
 		noCollision = false;
-		printf("y max bound. y == %d\n", y_pos);
 	}
 
 	// Return collision state

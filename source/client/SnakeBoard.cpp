@@ -12,6 +12,10 @@ SnakeBoard::SnakeBoard() : currentPlayer(1) {
 	player1.num = 1;
 	player2.num = 2;
 
+	// TODO: remove
+	internalState.player_2.setDir(0);
+	internalState.player_1.setDir(0);
+
 }
 
 // Destroy curses board
@@ -123,11 +127,6 @@ void SnakeBoard::quit(void) {
 
 // Receive a new BoardState from the server and update internally
 void SnakeBoard::getState(void) {
-	/*
-	BoardState tempState = internalState;
-	tempState.update();
-	internalState = tempState;
-	*/
 	int messlen;
 	int request = 1;
 
@@ -180,10 +179,8 @@ bool SnakeBoard::update() {
 		// Print win message depending on player
 		endwin();
 		if (internalState.winner == currentPlayer) {
-			printf("I won!\n");
 			won = true;
 		} else {
-			printf("I lost\n");
 			won = false;
 		}
 

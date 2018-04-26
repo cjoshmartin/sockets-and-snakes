@@ -21,11 +21,3 @@ TailSeg::TailSeg(int xpos, int ypos) {
 	x_pos = xpos;
 	y_pos = ypos;
 }
-
-int TailSeg::getXPos(void) {
-	return x_pos;
-}
-
-int TailSeg::getYPos(void) {
-	return y_pos;
-}

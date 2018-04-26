@@ -32,13 +32,11 @@ BoardState::~BoardState() {
 void BoardState::update() {
 	// Update snake head position and end game if collision with walls occurs
 	if (!player_1.updatePos()) {
-		printf("Game over\n");
 		game_on = false;
 		winner = 2;
 		return;
 	}
 	if (!player_2.updatePos()) {
-		printf("Game over\n");
 		game_on = false;
 		winner = 1;
 		return;
