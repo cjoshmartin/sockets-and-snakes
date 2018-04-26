@@ -13,7 +13,8 @@
 #include "../include/SnakeFood.h"
 #include "../include/SnakeHead.h"
 
-void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState)
+void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_in address, int addrlen, void *startState,
+            int &pInt)
 {
     fd_set readfds;
 
@@ -75,28 +76,26 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
                 new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));  
 
         //send new connection greeting message
-        //memcpy(buffer,&startState, sizeof(BoardState));
-		int hello = 42;
-        if( send(new_socket, &hello, sizeof(int), 0) != sizeof(startState))
-        {  
+        memcpy(buffer,&pInt, sizeof(int *));
+        if( send(new_socket, buffer, sizeof(int ), 0) != sizeof(int))
+        {
             perror("send");  
-        }  
+        }
 
-        puts("Welcome message sent successfully");  
+         // increasements player number
+        std::cout << "Player "<< pInt++ << " has joined.\n";
 
         //add new socket to array of sockets 
         for (i = 0; i < max_clients; i++)  
         {  
             //if position is empty 
-            if( client_socket[i] == 0 )   // <--TODO:check if client has never connected before
+            if( client_socket[i] == 0 )
             {
                 client_socket[i] = new_socket;
-                char *message = "HELLO, TEST ECHO\n";
-
                 break;
             }  
-        }  
-    }  
+        }
+    }
 
     //else its some IO operation on some other socket
     for (i = 0; i < max_clients; i++)
@@ -105,10 +104,9 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 
         if (FD_ISSET( sd , &readfds))
         {
-
             //Check if it was for closing , and also read the
             //incoming message
-            if ((valread = read( sd ,buffer, sizeof(BoardState))) == 0)
+            if ((valread = read( sd, buffer, sizeof(BoardState))) == 0)
             {
                 //Somebody disconnected , get his details and print
                 getpeername(sd , (struct sockaddr*)&address , \
@@ -140,14 +138,4 @@ void looper(int master_socket, int max_clients, int client_socket[2], sockaddr_i
 
 } //end of looper
 
-
-void sendToClient(BoardState state, int valread, int sd)
-{
-//    std::cout << state.test_string << "\n";
-    //set the string terminating NULL byte on the end
-    //of the data read 
-    //printf("Read from the client: %s\n", buffer);
-//    send(sd , (void *)&state , sizeof(BoardState), 0 );  // NOTE: sends data back,
-                                                //one client at a time 
-}
 

@@ -3,6 +3,7 @@
  *  client to synchronize board states in clients.
  */
 
+#include <cstring>
 #include "include/BoardState.h"
 #include <string.h>
 
